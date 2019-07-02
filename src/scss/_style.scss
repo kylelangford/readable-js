@@ -1,0 +1,610 @@
+/* Everhood 0.1.0
+ * http://everhood.com
+ * Copyright 2014–2015 Kyle Langford
+ * MIT License */
+// Global Variables
+$sans-serif: 'Montserrat', 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
+$sans-serif-2: 'Raleway', 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
+$serif: 'Palatino Linotype', 'Book Book Antiqua', 'Palatino' , serif;
+$primary-color: #eb2088;
+$secondary-color: #ffcc2f;
+$off-white-color: #f4f4f4;
+$grey-color: #cdcdcd;
+$heading-font-color: #999;
+$paragraph-font-color: #212121;
+$panel-odd-color: $off-white-color;
+$panel-even-color: white;
+$button-edge: shade( $primary-color, 50%);
+$wrap-padding: 6em;
+$small: 640px;
+$medium: 769px;
+$large: 1024px;
+$nav-bg-color: $primary-color;
+$border-radius:2px;
+
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  
+  opacity:0;
+  -webkit-font-feature-settings: "lnum";
+
+  .mast-head {
+    h1 {
+     position:relative;
+     left:-200px;
+   }
+  }
+  
+  &.tween {
+    opacity:1;
+    @include transition(all .7s ease-in);
+
+    .mast-head {
+      h1 {
+        @include transition(all .45s ease .7s);
+        left:0px;
+        opacity:1;
+      }
+    }
+    
+  }
+
+  &.dark-mode {
+    background: #212121;
+  }
+
+}
+
+.content_div {
+  box-shadow: 0 0 10px;
+  border: 10px solid black;
+  height: 800px;
+  left: -1000px;
+  width: 100%;
+  -webkit-animation: slide_in 800ms ease-out forwards;
+  position: absolute;
+  box-sizing: border-box;
+}
+
+@-webkit-keyframes slide_in {
+  0% {
+    left:-1000px;
+  }
+  100% {
+    left:0px;
+  }
+}
+
+// Typography
+p {
+  font-family: $serif;
+  font-size: 1.15em;
+  line-height: 1.5;
+  color: $paragraph-font-color;
+}
+
+h1,
+h2 {
+  font-family: $sans-serif;
+  font-weight: 800;
+}
+h3 {
+  font-family: $sans-serif-2;
+  font-weight: 800;
+}
+h4,
+h5 {
+  font-family: $sans-serif-2;
+  font-weight: 400;
+}
+
+p .icon {
+  font-size: 0.875em;
+}
+
+textarea {
+  width: 100%;
+  overflow: auto;
+  background-color: #f4f4f4;
+  border: none;
+}
+
+//Layout
+.panel {
+  @include clearfix;
+}
+
+.size-to-window {
+  min-height: 75vh;
+}
+
+.about {
+  background-color: #903;
+  
+  a {
+    color: white;
+  }
+}
+
+.wrap {
+  padding: $wrap-padding 0;
+  @include outer-container;
+  @include media(max-width $medium) {
+    padding: 6em 0;
+  }
+  img {
+    width:100%;
+  }
+  .logo {
+    width:50%;
+    margin-bottom:3em;
+  }
+}
+// Page Header
+.mast-head {
+  position: fixed;
+  width: 100%;
+  height: 6.5em;
+  font-family: $sans-serif;
+  z-index:9999;
+  h1 {
+    display: inline;
+    margin: 0;
+  }
+}
+
+.site-logo {
+  position: absolute;
+  top: 1.25em;
+  left: 1.25em;
+  color: $heading-font-color;
+  font-size: 1.6rem;
+  z-index: 9999;
+  padding-left: 1.2em;
+  // width:300px;
+
+  &.active {
+    color:white;
+  }
+  
+  @include media( max-width 640px ) {
+    left: 0;
+  }
+}
+
+//Footer
+p.copy {
+  color: $paragraph-font-color;
+  font-family: $sans-serif-2;
+  font-weight: 100;
+  font-size: .85em;
+}
+
+// Headroom.js
+.headroom {
+  @include transition(all 0.15s ease-in);
+}
+
+.headroom--pinned {
+  transform: translateY(0%);
+  &.headroom--top {
+    .site-logo {
+      color: $heading-font-color;
+    }
+  }
+}
+
+.headroom--unpinned {
+  transform: translateY(-100%);
+  &.active {
+    transform: translateY(0);
+  }
+}
+
+// Navigation
+nav {
+  &.primary {
+    background: $nav-bg-color;
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+    opacity: 0;
+    padding-right: 0.6em;
+    z-index: -1;
+    display: none;
+    // Overlay
+    &.overlay {
+      @include transition(opacity .5s ease-in);
+      display: table;
+      opacity: 1;
+      z-index: 999;
+      .wrap {
+        display: table-cell;
+        padding: 0;
+        vertical-align: middle;
+      }
+    }
+    ul {
+      width: 100vw;
+      text-align: center;
+      font-size: 3em;
+      a {
+        color: white;
+      }
+    }
+  }
+}
+
+// .tools {
+//   position: absolute;
+//   top: 0;
+//   right: -170px;
+//   z-index: 999;
+//   padding: 8px;
+//   margin: 8px;
+//   border: 2px solid #DCDCDC;
+//   border-radius: 3px;
+//   background-color: white;
+
+//   // width: 150px;
+//   // height: auto;
+//   // overflow: visible;
+//   // transition: all .25s ease-in;
+
+//   // * {
+//   //   transition: all .25s ease-in;
+//   // }
+
+
+//   &:focus {}
+
+//   &:hover {
+//     cursor: pointer;
+//   }
+// }
+
+// .input-group {
+//   margin-top: 8px;
+//   margin-bottom: 8px;
+
+//   label {
+//     font-size: 12px;
+//     font-weight: bold;
+//   }
+
+//   .input-radio {
+//     display: inline-block;
+//   }
+
+//   .input-slider {
+//     display: block;
+//     // margin: 16px 0
+//   }
+
+//   .dark-mode & {
+//     label {
+//       color: white;
+//     }
+//   }
+
+// }
+
+
+.monogram {
+  border-radius: 50%;
+  background-color: #e53b56;
+  padding: 8px;
+  max-width: 50px;
+  margin: auto;
+  display: block;
+}
+
+.flex {
+  display: flex;
+
+  .message {
+    align-items: center;
+    justify-content: center;
+  }
+}
+
+// Button
+button {
+  background: #e53b56;
+  border-radius: 4px;
+  border: none;
+  color: white;
+  line-height: 1.6;
+  padding: 4px 0;
+  margin: 16px 0 0;
+  display: block;
+  width: 100%;
+
+  &:hover {
+    // background-color: darken(color, amount);
+  } 
+}
+
+// Message
+.message {
+  width: 100%;
+  max-width: 700px;
+  margin: 0px auto;
+  padding: 0 2%;
+  position: relative;
+
+  // p:first-child:first-letter {
+  //   color: #903; 
+  //   font-family: Georgia;
+  //   initial-letter: 2;
+  // }
+
+  p:first-child:first-letter {
+    color: #e53b56;
+    color: #212121;
+    float: left;
+    font-family: Georgia;
+    font-size: 3.25em;
+    line-height: .8;
+    padding-top: 4px;
+    padding-right: 8px;
+    padding-left: 3px;
+  }
+
+  .dark-mode & {
+    p {
+      color: white;    
+    }
+
+    p:first-child:first-letter {
+      color: #ededed;
+    }
+  }
+
+  @media (prefers-dark-interface) {
+    p {
+      color: pink;    
+    }
+
+    p:first-child:first-letter {
+      color: #ededed;
+    }
+  }
+
+
+  &.knockout {
+    h2, h3, p {
+      color:white;
+    }
+  }
+
+  &.justify {
+    text-align: justify;
+  }
+  
+  .item {
+    margin-bottom:12em;
+  }
+  
+  .description {
+    text-align: left;
+  }
+  
+  h2 {
+    font-size: 3.5em;
+    line-height: 1;
+    margin-bottom: 0.35em;
+    @include media(max-width $medium) {
+      font-size: 2.75em;
+    }
+    span {
+      color: $secondary-color;
+    }
+  }
+  h3 {
+    margin-bottom: 1em;
+  }
+  p {
+    font-family: $sans-serif-2;
+    font-weight: 400;
+    font-size: 1.5rem;
+    @include media(max-width $medium) {
+      font-size: 1.25em;
+    }
+  }
+}
+
+.extras {
+  @include outer-container;
+  padding-top: 10px;
+
+  .half {
+     @include span-columns(6);
+  }
+}
+
+// Credits
+.credits {
+  text-align: center;
+  padding: 4em 2em;
+  @include clearfix;
+}
+
+// Line Behind Text
+.line-behind-text {
+  border-bottom: 1px solid $paragraph-font-color;
+  text-align: center;
+  width: 20%;
+  min-width: 200px;
+  margin: 0 auto 2.5em;
+
+  h2 {
+    background: white;
+    color: $paragraph-font-color;
+    display: inline-block;
+    font-size: 1rem;
+    padding: 0 10px;
+    position: relative;
+    text-transform: uppercase;
+    top: 14px;
+  }
+
+  .dark-mode & {
+    border-color: white;
+
+    h2 {
+      background: #212121;
+      color: white;
+    }
+
+  }
+}
+
+
+.dm-trigger {
+  position: absolute;
+  top: 0;
+  right: -150px;
+  cursor: pointer;
+
+  .dark-mode & {
+
+  }
+}
+
+
+/*
+ * Ruler
+ */
+.ruler {
+  display: flex;
+  justify-content: space-between;
+  flex-flow: row nowrap;
+  width: 100%;
+  top: 0;
+  position: relative;
+  height: 12px;
+  padding: 0 8px;
+
+  div {
+    border-left: 1px solid #979797;
+    height: 4px;
+    position:relative;
+
+    // @media (min-width: 800px) { 
+    //   height: 20px;
+    // }
+
+    span {
+      position: absolute;
+      top: 100%;
+      left: -20px;
+      width: 40px;
+      display: none;
+      text-align: center;
+      font-weight: bold;
+
+      @media (min-width: 800px) { 
+        font-size: 15px;
+      }
+
+    }
+  }
+}
+
+
+// http://danielstern.ca/range.css/#/
+// input[type=range] {
+//   height: 25px;
+//   -webkit-appearance: none;
+//   // margin: 10px 0;
+//   width: 100%;
+// }
+// // input[type=range]:focus {
+// //   outline: none;
+// // }
+
+// input[type=range]::-webkit-slider-runnable-track {
+//   width: 100%;
+//   height: 5px;
+//   cursor: pointer;
+//   animate: 0.2s;
+//   box-shadow: 0px 0px 0px #000000;
+//   background: #DCDCDC;
+//   border-radius: 1px;
+//   border: 0px solid #000000;
+// }
+// input[type=range]::-webkit-slider-thumb {
+//   box-shadow: 0px 0px 0px #000000;
+//   border: 1px solid #e53b56;
+//   height: 18px;
+//   width: 18px;
+//   border-radius: 25px;
+//   background: #e53b56;
+//   cursor: pointer;
+//   -webkit-appearance: none;
+//   margin-top: -7px;
+// }
+// input[type=range]:focus::-webkit-slider-runnable-track {
+//   background: #2497E3;
+// }
+// input[type=range]::-moz-range-track {
+//   width: 100%;
+//   height: 5px;
+//   cursor: pointer;
+//   animate: 0.2s;
+//   box-shadow: 0px 0px 0px #000000;
+//   background: #2497E3;
+//   border-radius: 1px;
+//   border: 0px solid #000000;
+// }
+// input[type=range]::-moz-range-thumb {
+//   box-shadow: 0px 0px 0px #000000;
+//   border: 1px solid #e53b56;
+//   height: 18px;
+//   width: 18px;
+//   border-radius: 25px;
+//   background: #e53b56;
+//   cursor: pointer;
+// }
+// input[type=range]::-ms-track {
+//   width: 100%;
+//   height: 5px;
+//   cursor: pointer;
+//   animate: 0.2s;
+//   background: transparent;
+//   border-color: transparent;
+//   color: transparent;
+// }
+// input[type=range]::-ms-fill-lower {
+//   background: #2497E3;
+//   border: 0px solid #000000;
+//   border-radius: 2px;
+//   box-shadow: 0px 0px 0px #000000;
+// }
+// input[type=range]::-ms-fill-upper {
+//   background: #2497E3;
+//   border: 0px solid #000000;
+//   border-radius: 2px;
+//   box-shadow: 0px 0px 0px #000000;
+// }
+// input[type=range]::-ms-thumb {
+//   margin-top: 1px;
+//   box-shadow: 0px 0px 0px #000000;
+//   border: 1px solid #2497E3;
+//   height: 18px;
+//   width: 18px;
+//   border-radius: 25px;
+//   background: #A1D0FF;
+//   cursor: pointer;
+// }
+// input[type=range]:focus::-ms-fill-lower {
+//   background: #2497E3;
+// }
+// input[type=range]:focus::-ms-fill-upper {
+//   background: #2497E3;
+// }

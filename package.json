@@ -1,0 +1,45 @@
+{
+  "name": "hood.css",
+  "version": "1.0.0",
+  "description": "Human oriented objective development CSS Toolkit",
+  "main": "gulpfile.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kylelangford/hood.css.git"
+  },
+  "keywords": [
+    "CSS",
+    "SCSS",
+    "Toolkit",
+    "Framework"
+  ],
+  "author": "Kyle Langford",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/kylelangford/hood.css/issues"
+  },
+  "homepage": "https://github.com/kylelangford/hood.css#readme",
+  "devDependencies": {
+    "@babel/core": "^7.4.5",
+    "@babel/preset-env": "^7.4.5",
+    "browser-sync": "^2.24.6",
+    "gulp": "^4.0.2",
+    "gulp-babel": "^8.0.0",
+    "gulp-clean": "^0.4.0",
+    "gulp-concat": "^2.6.1",
+    "gulp-modernizr": "^3.0.0",
+    "gulp-notify": "^3.2.0",
+    "gulp-prettier": "^2.1.0",
+    "gulp-sass": "^4.0.2",
+    "gulp-series": "^1.0.2",
+    "gulp-sourcemaps": "^2.6.4",
+    "gulp-uglify": "^3.0.0",
+    "normalize.css": "^8.0.1",
+    "path": "^0.12.7",
+    "rimraf": "^2.6.2"
+  },
+  "dependencies": {}
+}
