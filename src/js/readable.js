@@ -23,17 +23,6 @@
   };
 
   /**
-   * Check if object is part of the DOM
-   * @constructor
-   * @param {Object} obj element to check
-   */
-  function isDOMElement(obj) {
-    return (
-      obj && typeof window !== 'undefined' && (obj === window || obj.nodeType)
-    );
-  }
-
-  /**
    * Extend.js
    * Merge defaults with user options
    * https://gist.github.com/cferdinandi/4f8a0e17921c5b46e6c4
@@ -61,36 +50,43 @@
     return extended;
   };
 
-  var checkForSettings = function() {
-    // Retrieve the object from storage
-    var retrievedSettings = localStorage.getItem('readableSettings');
-    return retrievedSettings;
-  };
-
-  var createSettings = function(options) {
-    // Put the object into storage
-    localStorage.setItem('readableSettings', JSON.stringify(options));
-  };
-
+  /**
+   * Simple Two Way Binding
+   * https://www.wintellect.com/data-binding-pure-javascript/
+   * @private
+   */
   var Binding = function(b) {
     var _this = this;
-    this.element = b.element;
+    this.elementBindings = [];
     this.value = b.object[b.property];
-    this.attribute = b.attribute;
+
     this.valueGetter = function() {
       return _this.value;
     };
 
     this.valueSetter = function(val) {
       _this.value = val;
-      _this.element[_this.attribute] = val;
+      for (var i = 0; i < _this.elementBindings.length; i++) {
+        var binding = _this.elementBindings[i];
+        binding.element[binding.attribute] = val;
+      }
     };
 
-    if (b.event) {
-      this.element.addEventListener(b.event, function(event) {
-        _this.value = _this.element[_this.attribute];
-      });
-    }
+    this.addBinding = function(element, attribute, event) {
+      var binding = {
+        element: element,
+        attribute: attribute,
+      };
+      if (event) {
+        element.addEventListener(event, function(event) {
+          _this.valueSetter(element[attribute]);
+        });
+        binding.event = event;
+      }
+      this.elementBindings.push(binding);
+      element[attribute] = _this.value;
+      return _this;
+    };
 
     Object.defineProperty(b.object, b.property, {
       get: this.valueGetter,
@@ -98,12 +94,53 @@
     });
 
     b.object[b.property] = this.value;
-
-    this.element[this.attribute] = this.value;
   };
 
   /**
-   * Article readability tool for sighted users.
+   * Get/Set Settings
+   * @private
+   */
+  function setSettings(options) {
+    console.log('saved');
+    // Put the object into storage
+    localStorage.setItem('readableSettings', JSON.stringify(options));
+  }
+
+  function getSettings() {
+    // Retrieve the object from storage
+    var retrievedSettings = localStorage.getItem('readableSettings');
+    return retrievedSettings;
+  }
+
+  /**
+   * Some string helper functions
+   * https://www.wintellect.com/data-binding-pure-javascript/
+   * @private
+   */
+  function removeDashes(string) {
+    string = string.replace(/-/g, ' ');
+    string = string.replace(/_/g, ' ');
+
+    return string;
+  }
+
+  function toTitleCase(str) {
+    return str.replace(/\w\S*/g, function(txt) {
+      return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+    });
+  }
+
+  function acronym(string) {
+    string = removeDashes(string);
+    var matches = string.match(/\b(\w)/g); // ['J','S','O','N']
+    var acronym = matches.join(''); // JSON
+
+    return acronym;
+  }
+
+  /**
+   * Readable
+   * Long Form readability tool for sighted users.
    * Exposes Typesettings, so the user can adjust to their own personal needs
    * Saves settings in local storage
    * @constructor
@@ -111,40 +148,53 @@
    * @param {Object} options options for the widget
    */
   function Readable(elem, options) {
-    var savedOptions = checkForSettings();
+    // Check for Saved Settings
+    // var settings = this.getSettings();
+    // settings = JSON.parse(settings);
+    // if (settings) {
+    // Update Settings
+    // } else {
+    options = extend(options, Readable.options);
+    // }
 
-    // options = new settings // overwrite arguememt options
-    if (savedOptions) {
-      console.log('settings exist');
-      options = extend(options, savedOptions);
-    } else {
-      console.log('use defaults');
-      options = extend(options, Readable.options);
-    }
-
-    // Check for settings
+    // Store Options
     this.initialised = false;
-    this.elem = elem;
+    this.targetClass = elem;
+    this.namespace = options.namespace;
+    this.elem = this.elem;
     this.title = options.title;
-    this.addRules = options.addRules;
-    this.widgetClass = options.widgetClass;
-    this.targetClass = options.targetClass;
-    this.inputs = options.inputs;
+    // this.addRules = options.addRules;
+    // this.presets = options.addRules;
+    this.defaultStyles = options.defaultStyles;
+    // Scaffold out classes / ids
+    this.inputs = options.inputs.map(function(input) {
+      input.id =
+        options.namespace + '-' + input.type + '-' + acronym(input.name);
+      input.class =
+        options.namespace + '--' + input.type + '-' + acronym(input.name);
+      input.label = toTitleCase(removeDashes(input.name)) + ':';
+      input.labelClass = options.namespace + '--label-' + acronym(input.name);
+      return input;
+    });
   }
 
   Readable.prototype = {
     constructor: Readable,
 
+    /**
+     * Initialize Component
+     * @private
+     */
     init: function() {
       if (!Readable.isSupported) {
         return;
       }
 
-      var inputs = Readable.options.inputs;
+      if (this.defaultStyles) {
+        this.addDefaultStyles();
+      }
 
-      this.addDefaultStyles();
-      this.createFormElement(inputs);
-      this.addTics();
+      this.createWidget(this.targetClass);
 
       // defer event registration to handle browser
       // potentially restoring previous scroll position
@@ -154,20 +204,133 @@
       return this;
     },
 
+    /**
+     * Destroy Component
+     * @private
+     */
     destroy: function() {
-      // Remove Event Listeners and Markup
-      document.removeEventListener('change');
       // var element = document.getElementById(elementId);
+      document.removeEventListener('change');
       // element.parentNode.removeChild(element);
     },
 
     /**
-     * Attaches the scroll event
+     * Generates Widget
+     * @private
+     */
+    createWidget: function(target) {
+      if (target) {
+        let widget = document.createElement('div');
+        let inputList = document.createElement('div');
+        let title = document.createElement('small');
+        let button = document.createElement('button');
+
+        // Create Widget Elemt
+        widget.id = this.namespace;
+        widget.classList.add(this.namespace);
+
+        // Add Title
+        title.innerHTML = this.title;
+        widget.appendChild(title);
+
+        // Add Input Container
+        widget.appendChild(inputList);
+
+        // if(presets) {
+        //   // Add Button
+        //   button.id = 'save';
+        //   button.innerHTML = 'Save';
+        //   widget.appendChild(button);
+        // }
+
+        // Add Markup to Page
+        target.appendChild(widget);
+
+        this.createFormElements(inputList);
+      } else {
+        // throw err
+      }
+    },
+
+    /**
+     * Generates Form Inputs
+     * @private
+     */
+    createFormElements: function(container) {
+      /*
+       * Input Templates
+       * https://wesbos.com/template-strings-html/
+       */
+
+      const inputs = Readable.options.inputs;
+
+      // Add Inputs
+      inputs.forEach(function(input, index) {
+        let markup = document.createElement('div');
+        markup.classList.add('input-group');
+
+        // spread operator to print attributes
+        const range = `
+          <label class="${input.labelClass}" for="${input.name}">${input.label} <span>${input.value}</span></label>
+          <input id="${input.id}" name="${input.name}" class="${input.class}" type="range"  min="${input.min}" max="${input.max}" step="${input.step}" />
+        `;
+
+        // const checkbox = `
+        //   <input id="${input.id}" type="checkbox" name="${input.name}" value="${input.value}" class="${input.class}" />
+        //   <label class="${input.labelClass}" for="${input.name}">${input.label}</label>
+        // `;
+
+        // if range
+        // if (input.type == 'range') {
+        markup.innerHTML = range;
+        markup.classList.add('range');
+        // } else {
+        //   markup.innerHTML = checkbox;
+        //   markup.classList.add('checkbox');
+        // }
+
+        // Add Markup
+        container.appendChild(markup);
+      });
+
+      // if tics
+      // this.addTics();
+      //
+
+      // Bind Inputs
+      this.bindInputs(inputs);
+    },
+
+    /**
+     * Binds Input Data to Model
+     * @private
+     */
+    bindInputs: function(inputs) {
+      inputs.forEach(function(input, index) {
+        var selector = '.' + input.labelClass + ' span';
+        var myInput = document.getElementById(input.id);
+        var myLabel = document.querySelector(selector);
+        var styleBind = document.querySelector('.make-readable p');
+        console.log(styleBind);
+
+        new Binding({
+          object: Readable.options.inputs[index],
+          property: 'value',
+        })
+          .addBinding(myInput, 'value', 'change')
+          .addBinding(myLabel, 'innerHTML');
+      });
+    },
+
+    /**
+     * Handles Event Delegation
      * @private
      */
     attachEvent: function() {
       if (!this.initialised) {
         this.initialised = true;
+
+        var signal = new CustomEvent('bang');
 
         /*
          * https://javascript.info/bubbling-and-capturing
@@ -187,52 +350,25 @@
             // Don't follow the link
             event.preventDefault();
 
-            // Make this dynamic
-
-            // if event.target matches one of the input keys else return
-            if (event.target.matches('#slider-fs')) {
-              targetElem.forEach(function(elem) {
-                elem.style.fontSize = v + 'px';
-              });
-
-              // Update Tool
-              // $('.ui-fs span').html(v);
-            }
-
-            if (event.target.matches('#slider-ls')) {
-              targetElem.forEach(function(elem) {
-                elem.style.letterSpacing = v / 10 + 'em';
-              });
-
-              // $('.ui-ls span').html(v);
-            }
-
-            if (event.target.matches('#slider-ws')) {
-              targetElem.forEach(function(elem) {
-                elem.style.wordSpacing = v + 'em';
-              });
-
-              // $('.ui-ws span').html(v);
-            }
-
-            if (event.target.matches('#slider-lh')) {
-              targetElem.forEach(function(elem) {
-                elem.style.lineHeight = v;
-              });
-
-              // $('.ui-lh span').html(v);
-            }
-
-            if (event.target.matches('#checkbox-jt')) {
-              var isChecked = document.getElementById('elementName').checked;
-              if (isChecked) {
-                //checked
-                // add Class
-              } else {
-                //unchecked
-                // Remove Class
+            // Can I bind to the style directly
+            inputs.forEach(function(input) {
+              if (event.target.matches('#' + input.id)) {
+                targetElem.forEach(function(elem) {
+                  input.update(elem, v);
+                });
               }
-            }
+            });
+
+            // if (event.target.matches('#checkbox-jt')) {
+            //   var isChecked = document.getElementById('elementName').checked;
+            //   if (isChecked) {
+            //     //checked
+            //     // add Class
+            //   } else {
+            //     //unchecked
+            //     // Remove Class
+            //   }
+            // }
           },
           false
         );
@@ -241,7 +377,7 @@
           'click',
           function(event) {
             if (event.target.matches('#save')) {
-              createSettings(Readable.options);
+              setSettings(Readable.options);
             }
           },
           false
@@ -249,110 +385,34 @@
       }
     },
 
-    /**
-     * Generates Form Markup
-     * @private
-     */
-    createFormElement: function(inputs) {
-      /*
-       * Input Templates
-       * https://wesbos.com/template-strings-html/
-       */
-
-      let widget = document.createElement('div');
-      let title = document.createElement('small');
-      let button = document.createElement('button');
-      let target = document.querySelector('.readable');
-
-      let presets = [
-        { name: 'Design', age: 2 },
-        { name: 'Big', age: 8 },
-        { name: 'Small', age: 1 },
-      ];
-
-      // Create Widget Elemt
-      widget.id = 'readable-js';
-      widget.classList.add('tools');
-
-      // Add Title
-      title.innerHTML = 'Adjust Typesetting';
-      widget.appendChild(title);
-
-      // Add Button
-      button.id = 'save';
-      button.innerHTML = 'Save';
-      widget.appendChild(button);
-
-      // Add Inputs
-      inputs.forEach(function(input, index) {
-        let markup = document.createElement('div');
-        markup.classList.add('input-group');
-
-        // spread operator to print attributes
-
-        const range = `
-          <label class="ui-fs" for="${input.name}">${input.label} <span>${input.value}</span></label>
-          <input id="${input.id}" type="range" min="${input.min}" max="${input.max}" name="${input.name}" class="input-slider" />
-        `;
-
-        const checkbox = `
-          <input id="${input.id}" type="checkbox" name="${input.name}" value="justify" class="input-checkbox" />
-          <label for="${input.name}">${input.label}</label>
-        `;
-
-        const select = `
-          <div class="input-group select">
-          <label for="${input.name}">${input.label}</label>
-          <select>
-              ${presets.map(
-                preset =>
-                  `<option value=${presets.name}>${
-                    presets.name
-                  } is ${presets.age * 7}</option>`
-              )}
-          </select>
-          </div>
-        `;
-
-        var myID = '#' + Readable.options.inputs[index].id;
-        var myElement = document.getElementById(myID);
-
-        console.log(myID);
-        console.log(myElement);
-
-        // Element Doesnt Exist Yet
-        // new Binding({
-        //   object: Readable.options.inputs[index],
-        //   property: 'value',
-        //   element: myElement,
-        //   attribute: 'value',
-        //   event: 'change',
-        // });
-
-        // if range
-        if (input.type == 'range') {
-          markup.innerHTML = range;
-          markup.classList.add('range');
-        } else {
-          markup.innerHTML = checkbox;
-          markup.classList.add('checkbox');
-        }
-
-        console.log(markup);
-
-        // Add Inputs
-        widget.appendChild(markup);
-      });
-
-      // Add Markup to Page
-      target.appendChild(widget);
-    },
+    // addPresets: function() {
+    // let presets = [
+    //   { name: 'Design', age: 2 },
+    //   { name: 'Big', age: 8 },
+    //   { name: 'Small', age: 1 },
+    // ];
+    // const select = `
+    //   <div class="input-group select">
+    //   <label for="${input.name}">${input.label}</label>
+    //   <select>
+    //       ${presets.map(
+    //         preset =>
+    //           `<option value=${presets.name}>${
+    //             presets.name
+    //           } is ${presets.age * 7}</option>`
+    //       )}
+    //   </select>
+    //   </div>
+    // `;
+    // },
 
     addDefaultStyles: function() {
       // Default Styles
       var style = document.createElement('style');
       style.innerHTML =
-        '.tools {' +
+        '.' +
+        this.namespace +
+        ' {' +
         'position: absolute;' +
         'top: 0;' +
         'right: -170px;' +
@@ -368,6 +428,7 @@
         'margin-bottom: 8px;' +
         '}' +
         '.input-group label {' +
+        'display: block;' +
         'font-size: 12px;' +
         'font-weight: bold;' +
         '}' +
@@ -378,10 +439,10 @@
         'display: block;' +
         '}';
 
-      // // Get the first script tag
+      // Get the first script tag
       var ref = document.querySelector('head');
 
-      // // Insert our new styles before the first script tag
+      // Insert our new styles before the first script tag
       ref.parentNode.insertBefore(style, ref);
     },
 
@@ -420,63 +481,67 @@
    */
 
   Readable.options = {
-    elem: '.readable p',
+    elem: '.make-readable p',
     title: 'Adjust Typesetting',
-    addRules: true,
-    widgetClass: '.tools',
-    targetClass: '.readable',
+    defaultStyles: true,
+    // presets: false,
+    // addRules: true,
+    namespace: 'readable',
     inputs: [
       {
-        css: 'font-size',
         type: 'range',
-        id: 'slider-fs',
-        label: 'Font Size:',
+        css: 'font-size',
+        name: 'font-size',
+        update: function(elem, v) {
+          elem.style.fontSize = v + 'px';
+        },
         min: 14,
         max: 36,
         step: 1,
         value: 24,
       },
       {
+        type: 'range',
         css: 'word-spacing',
-        type: 'range',
-        id: 'slider-ws',
         name: 'word-spacing',
-        label: 'Word Spacing:',
+        update: function(elem, v) {
+          elem.style.wordSpacing = v + 'em';
+        },
         min: 0,
         max: 3,
         step: 0.1,
         value: 0,
       },
       {
+        type: 'range',
         css: 'letter-spacing',
-        type: 'range',
-        id: 'slider-ls',
         name: 'letter-spacing',
-        label: 'Letter Spacing:',
+        update: function(elem, v) {
+          elem.style.letterSpacing = v / 10 + 'em';
+        },
         min: 0,
         max: 3,
         step: 0.1,
         value: 0,
       },
       {
-        css: 'line-height',
         type: 'range',
-        id: 'slider-lh',
+        css: 'line-height',
         name: 'line-height',
-        label: 'Line Height:',
+        update: function(elem, v) {
+          elem.style.lineHeight = v;
+        },
         min: 1,
         max: 3,
         step: 0.1,
         value: 1.4,
       },
-      {
-        css: 'align',
-        type: 'checkbox',
-        id: 'checkbox-jt',
-        name: 'justify-type',
-        label: 'Justify Type:',
-        value: false,
-      },
+      // {
+      //   type: 'checkbox',
+      //   css: 'align',
+      //   name: 'justify-type',
+      //   value: null,
+      // },
     ],
   };
 

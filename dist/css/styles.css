@@ -637,7 +637,7 @@ dl dd {
 
 body {
   opacity: 0;
-  -webkit-font-feature-settings: "lnum";
+  -webkit-font-feature-settings: 'lnum';
 }
 
 body .mast-head h1 {
@@ -733,6 +733,11 @@ textarea {
   background-color: #903;
 }
 
+.about .flex {
+  align-items: center;
+  justify-content: center;
+}
+
 .about a {
   color: white;
 }
@@ -802,7 +807,7 @@ p.copy {
   color: #212121;
   font-family: "Raleway", "Helvetica Neue", "Helvetica", "Arial", sans-serif;
   font-weight: 100;
-  font-size: .85em;
+  font-size: 0.85em;
 }
 
 .headroom {
@@ -907,7 +912,7 @@ button {
   float: left;
   font-family: Georgia;
   font-size: 3.25em;
-  line-height: .8;
+  line-height: 0.8;
   padding-top: 4px;
   padding-right: 8px;
   padding-left: 3px;
@@ -930,7 +935,9 @@ button {
   }
 }
 
-.message.knockout h2, .message.knockout h3, .message.knockout p {
+.message.knockout h2,
+.message.knockout h3,
+.message.knockout p {
   color: white;
 }
 

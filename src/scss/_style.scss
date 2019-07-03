@@ -5,7 +5,7 @@
 // Global Variables
 $sans-serif: 'Montserrat', 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
 $sans-serif-2: 'Raleway', 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
-$serif: 'Palatino Linotype', 'Book Book Antiqua', 'Palatino' , serif;
+$serif: 'Palatino Linotype', 'Book Book Antiqua', 'Palatino', serif;
 $primary-color: #eb2088;
 $secondary-color: #ffcc2f;
 $off-white-color: #f4f4f4;
@@ -14,49 +14,45 @@ $heading-font-color: #999;
 $paragraph-font-color: #212121;
 $panel-odd-color: $off-white-color;
 $panel-even-color: white;
-$button-edge: shade( $primary-color, 50%);
+$button-edge: shade($primary-color, 50%);
 $wrap-padding: 6em;
 $small: 640px;
 $medium: 769px;
 $large: 1024px;
 $nav-bg-color: $primary-color;
-$border-radius:2px;
-
+$border-radius: 2px;
 
 * {
   box-sizing: border-box;
 }
 
 body {
-  
-  opacity:0;
-  -webkit-font-feature-settings: "lnum";
+  opacity: 0;
+  -webkit-font-feature-settings: 'lnum';
 
   .mast-head {
     h1 {
-     position:relative;
-     left:-200px;
-   }
+      position: relative;
+      left: -200px;
+    }
   }
-  
+
   &.tween {
-    opacity:1;
-    @include transition(all .7s ease-in);
+    opacity: 1;
+    @include transition(all 0.7s ease-in);
 
     .mast-head {
       h1 {
-        @include transition(all .45s ease .7s);
-        left:0px;
-        opacity:1;
+        @include transition(all 0.45s ease 0.7s);
+        left: 0px;
+        opacity: 1;
       }
     }
-    
   }
 
   &.dark-mode {
     background: #212121;
   }
-
 }
 
 .content_div {
@@ -72,10 +68,10 @@ body {
 
 @-webkit-keyframes slide_in {
   0% {
-    left:-1000px;
+    left: -1000px;
   }
   100% {
-    left:0px;
+    left: 0px;
   }
 }
 
@@ -124,7 +120,12 @@ textarea {
 
 .about {
   background-color: #903;
-  
+
+  .flex {
+    align-items: center;
+    justify-content: center;
+  }
+
   a {
     color: white;
   }
@@ -137,11 +138,11 @@ textarea {
     padding: 6em 0;
   }
   img {
-    width:100%;
+    width: 100%;
   }
   .logo {
-    width:50%;
-    margin-bottom:3em;
+    width: 50%;
+    margin-bottom: 3em;
   }
 }
 // Page Header
@@ -150,7 +151,7 @@ textarea {
   width: 100%;
   height: 6.5em;
   font-family: $sans-serif;
-  z-index:9999;
+  z-index: 9999;
   h1 {
     display: inline;
     margin: 0;
@@ -168,10 +169,10 @@ textarea {
   // width:300px;
 
   &.active {
-    color:white;
+    color: white;
   }
-  
-  @include media( max-width 640px ) {
+
+  @include media(max-width 640px) {
     left: 0;
   }
 }
@@ -181,7 +182,7 @@ p.copy {
   color: $paragraph-font-color;
   font-family: $sans-serif-2;
   font-weight: 100;
-  font-size: .85em;
+  font-size: 0.85em;
 }
 
 // Headroom.js
@@ -218,7 +219,7 @@ nav {
     display: none;
     // Overlay
     &.overlay {
-      @include transition(opacity .5s ease-in);
+      @include transition(opacity 0.5s ease-in);
       display: table;
       opacity: 1;
       z-index: 999;
@@ -259,7 +260,6 @@ nav {
 //   //   transition: all .25s ease-in;
 //   // }
 
-
 //   &:focus {}
 
 //   &:hover {
@@ -293,7 +293,6 @@ nav {
 
 // }
 
-
 .monogram {
   border-radius: 50%;
   background-color: #e53b56;
@@ -326,7 +325,7 @@ button {
 
   &:hover {
     // background-color: darken(color, amount);
-  } 
+  }
 }
 
 // Message
@@ -338,7 +337,7 @@ button {
   position: relative;
 
   // p:first-child:first-letter {
-  //   color: #903; 
+  //   color: #903;
   //   font-family: Georgia;
   //   initial-letter: 2;
   // }
@@ -349,7 +348,7 @@ button {
     float: left;
     font-family: Georgia;
     font-size: 3.25em;
-    line-height: .8;
+    line-height: 0.8;
     padding-top: 4px;
     padding-right: 8px;
     padding-left: 3px;
@@ -357,7 +356,7 @@ button {
 
   .dark-mode & {
     p {
-      color: white;    
+      color: white;
     }
 
     p:first-child:first-letter {
@@ -367,7 +366,7 @@ button {
 
   @media (prefers-dark-interface) {
     p {
-      color: pink;    
+      color: pink;
     }
 
     p:first-child:first-letter {
@@ -375,25 +374,26 @@ button {
     }
   }
 
-
   &.knockout {
-    h2, h3, p {
-      color:white;
+    h2,
+    h3,
+    p {
+      color: white;
     }
   }
 
   &.justify {
     text-align: justify;
   }
-  
+
   .item {
-    margin-bottom:12em;
+    margin-bottom: 12em;
   }
-  
+
   .description {
     text-align: left;
   }
-  
+
   h2 {
     font-size: 3.5em;
     line-height: 1;
@@ -423,7 +423,7 @@ button {
   padding-top: 10px;
 
   .half {
-     @include span-columns(6);
+    @include span-columns(6);
   }
 }
 
@@ -460,10 +460,8 @@ button {
       background: #212121;
       color: white;
     }
-
   }
 }
-
 
 .dm-trigger {
   position: absolute;
@@ -472,10 +470,8 @@ button {
   cursor: pointer;
 
   .dark-mode & {
-
   }
 }
-
 
 /*
  * Ruler
@@ -493,9 +489,9 @@ button {
   div {
     border-left: 1px solid #979797;
     height: 4px;
-    position:relative;
+    position: relative;
 
-    // @media (min-width: 800px) { 
+    // @media (min-width: 800px) {
     //   height: 20px;
     // }
 
@@ -508,14 +504,12 @@ button {
       text-align: center;
       font-weight: bold;
 
-      @media (min-width: 800px) { 
+      @media (min-width: 800px) {
         font-size: 15px;
       }
-
     }
   }
 }
-
 
 // http://danielstern.ca/range.css/#/
 // input[type=range] {
