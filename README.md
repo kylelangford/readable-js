@@ -1,6 +1,11 @@
-# Project Title
+# Readable JS
 
-One Paragraph of project description goes here
+An accessiblity plugin Readable.js looks to provide users with the ability to adjust the type as they need while providing developers a toolset to extend.
+
+##Demo
+You can see rainbow in action at http://readable-js.com
+
+You can also build/download custom packages from there.
 
 ## Getting Started
 
@@ -18,16 +23,16 @@ Give examples
 
 A step by step series of examples that tell you how to get a development env running
 
-Say what the step will be
+Resolve Dependencies
 
 ```
-Give the example
+npm install
 ```
 
-And repeat
+Build Local Server
 
 ```
-until finished
+gulp
 ```
 
 End with an example of getting some data out of the system or using it for a little demo

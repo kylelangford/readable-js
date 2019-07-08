@@ -1,6 +1,6 @@
 {
-  "name": "hood.css",
-  "version": "1.0.0",
+  "name": "Readable-js",
+  "version": "0.0.1",
   "description": "Human oriented objective development CSS Toolkit",
   "main": "gulpfile.js",
   "scripts": {

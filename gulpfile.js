@@ -9,7 +9,6 @@ var uglify = require('gulp-uglify');
 var path = require('path');
 var rimraf = require('rimraf');
 var browser = require('browser-sync').create();
-const prettier = require('gulp-prettier');
 
 // Settings
 var cssOutPutStyle = 'expanded';
@@ -17,17 +16,20 @@ var cssOutPutStyle = 'expanded';
 
 // Tasks
 gulp.task('css', gulp.series(css));
-
-gulp.task('validate', gulp.series(validate));
-
 gulp.task('build', gulp.series(css, js));
-
+gulp.task('publish', gulp.series(publish, publishMinified));
 gulp.task('default', gulp.series('build', server, watch));
+
+function createErrorHandler(name) {
+  return function(err) {
+    console.error('Error from ' + name + ' in compress task', err.toString());
+  };
+}
 
 // Compile Scss into CSS
 function css() {
   return gulp
-    .src('./src/scss/*.scss')
+    .src('./demo/src/scss/*.scss')
     .pipe(sourcemaps.init())
     .pipe(
       sass({
@@ -36,7 +38,7 @@ function css() {
       })
     )
     .pipe(sourcemaps.write('./maps'))
-    .pipe(gulp.dest('./dist/css'))
+    .pipe(gulp.dest('./demo/assets/css'))
     .pipe(
       notify({
         title: 'SASS Compiled',
@@ -48,14 +50,12 @@ function css() {
 
 // JS
 function js() {
-  function createErrorHandler(name) {
-    return function(err) {
-      console.error('Error from ' + name + ' in compress task', err.toString());
-    };
-  }
-
   return gulp
-    .src(['src/js/readable.js', 'src/js/main.js'])
+    .src([
+      './src/readable.js',
+      './demo/src/js/vendor/prism.js',
+      './demo/src/js/main.js',
+    ])
     .pipe(
       babel({
         presets: ['@babel/env'],
@@ -66,7 +66,7 @@ function js() {
     .pipe(uglify())
     .on('error', createErrorHandler('uglify'))
     .pipe(sourcemaps.write('./maps'))
-    .pipe(gulp.dest('./dist/js/'))
+    .pipe(gulp.dest('./demo/assets/js/'))
     .pipe(
       notify({
         title: 'JS Minified',
@@ -76,17 +76,43 @@ function js() {
     );
 }
 
-function validate() {
+function publishMinified() {
   return gulp
-    .src('./src/js/*.js')
+    .src(['./src/readable.js'])
     .pipe(
-      prettier({
-        // Normal prettier options, e.g.:
-        singleQuote: true,
-        trailingComma: 'all',
+      babel({
+        presets: ['@babel/env'],
       })
     )
-    .pipe(gulp.dest(file => file.base));
+    .pipe(concat('readable.min.js'))
+    .pipe(uglify())
+    .on('error', createErrorHandler('uglify'))
+    .pipe(gulp.dest('./dist/'))
+    .pipe(
+      notify({
+        title: 'JS Minified',
+        message: 'All JS files in the theme have been minified.',
+        onLast: true,
+      })
+    );
+}
+
+function publish() {
+  return gulp
+    .src(['./src/readable.js'])
+    .pipe(
+      babel({
+        presets: ['@babel/env'],
+      })
+    )
+    .pipe(gulp.dest('./dist/'))
+    .pipe(
+      notify({
+        title: 'JS Minified',
+        message: 'All JS files in the theme have been minified.',
+        onLast: true,
+      })
+    );
 }
 
 /**
@@ -95,7 +121,7 @@ function validate() {
 function server(done) {
   browser.init({
     server: {
-      baseDir: '.',
+      baseDir: './demo/',
       port: 3000,
     },
   });
@@ -105,10 +131,10 @@ function server(done) {
 // Watch for file changes
 function watch() {
   gulp
-    .watch(['./src/scss/**/*.scss'])
+    .watch(['./demo/src/scss/**/*.scss'])
     .on('change', gulp.series(css, browser.reload));
   gulp
-    .watch(['./src/js/**/*.js'])
+    .watch(['./demo/src/js/**/*.js', './src/js/*.js'])
     .on('change', gulp.series(js, browser.reload));
-  gulp.watch(['./*.html']).on('change', gulp.series(browser.reload));
+  gulp.watch(['./demo/*.html']).on('change', gulp.series(browser.reload));
 }

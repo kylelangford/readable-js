@@ -96,6 +96,28 @@
     b.object[b.property] = this.value;
   };
 
+  // Generic class:
+  // function LogSlider(options) {
+  //   options = options || {};
+  //   this.minpos = options.minpos || 0;
+  //   this.maxpos = options.maxpos || 100;
+  //   this.minlval = Math.log(options.minval || 1);
+  //   this.maxlval = Math.log(options.maxval || 100000);
+
+  //   this.scale = (this.maxlval - this.minlval) / (this.maxpos - this.minpos);
+  // }
+
+  // LogSlider.prototype = {
+  //   // Calculate value from a slider position
+  //   value: function(position) {
+  //     return Math.exp((position - this.minpos) * this.scale + this.minlval);
+  //   },
+  //   // Calculate slider position from a value
+  //   position: function(value) {
+  //     return this.minpos + (Math.log(value) - this.minlval) / this.scale;
+  //   },
+  // };
+
   /**
    * Get/Set Settings
    * @private
@@ -192,6 +214,7 @@
 
       if (this.defaultStyles) {
         this.addDefaultStyles();
+        this.addTics();
       }
 
       this.createWidget(this.targetClass);
@@ -275,6 +298,13 @@
           <input id="${input.id}" name="${input.name}" class="${input.class}" type="range"  min="${input.min}" max="${input.max}" step="${input.step}" />
         `;
 
+        // Usage:
+        // var logsl = new LogSlider({
+        //   maxpos: 20,
+        //   minval: 100,
+        //   maxval: 10000000,
+        // });
+
         // const checkbox = `
         //   <input id="${input.id}" type="checkbox" name="${input.name}" value="${input.value}" class="${input.class}" />
         //   <label class="${input.labelClass}" for="${input.name}">${input.label}</label>
@@ -336,6 +366,13 @@
          * https://javascript.info/bubbling-and-capturing
          * https://gomakethings.com/listening-for-click-events-with-vanilla-javascript/
          */
+
+        // Log Slider
+
+        // $('#slider').on('change', function() {
+        //    var val = logsl.value(+$(this).val());
+        //    $('#value').val(val.toFixed(0));
+        // });
 
         document.addEventListener(
           'change',
@@ -482,7 +519,7 @@
 
   Readable.options = {
     elem: '.make-readable p',
-    title: 'Adjust Typesetting',
+    title: 'Change Typesetting',
     defaultStyles: true,
     // presets: false,
     // addRules: true,
@@ -543,6 +580,17 @@
       //   value: null,
       // },
     ],
+    // templates: [
+    //   {
+    //     type: 'range',
+    //     html: `<label class="${input.labelClass}" for="${input.name}">${input.label} <span>${input.value}</span></label>
+    //            <input id="${input.id}" name="${input.name}" class="${input.class}" type="range"  min="${input.min}" max="${input.max}" step="${input.step}" />`,
+    //   },
+    //   {
+    //     type: 'checkbox',
+    //     html: ``,
+    //   },
+    // ],
   };
 
   Readable.isSupported =
