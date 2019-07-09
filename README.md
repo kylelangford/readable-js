@@ -68,9 +68,15 @@ templates: [
 ],
 ```
 
+### Props
+
+```
+id="${input.id}"
+```
+
 ## Themes
 
-```css
+```scss
 .tools {
   position: absolute;
   top: 0;
