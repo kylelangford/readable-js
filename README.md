@@ -4,7 +4,7 @@ An accessiblity plugin Readable.js looks to provide users with the ability to ad
 
 ## Demo
 
-You can see Readable in action at http://readable-js.com
+You can see Readable in action at http://www.readable-js.com
 
 ## How do I use it?
 
@@ -33,20 +33,7 @@ readable.options = {
   title: 'Change Typesetting',
   defaultStyles: true,
   namespace: 'readable',
-  inputs: [
-    {
-      type: 'range',
-      css: 'font-size',
-      name: 'font-size',
-      update: function(elem, v) {
-        elem.style.fontSize = v + 'px';
-      },
-      min: 14,
-      max: 36,
-      step: 1,
-      value: 24,
-    },
-  ],
+  inputs: [],
   templates: [],
 };
 ```
@@ -59,6 +46,52 @@ readable.options = {
 - `namespace` True if test is skipped.
 - `inputs` Test duration.
 - `templates` Pass obj.
+
+### Props
+
+```html
+id="${input.id}"
+```
+
+```javascript
+inputs: [
+  {
+    type: 'range',
+    css: 'font-size',
+    name: 'font-size',
+    update: function(elem, v) {
+      elem.style.fontSize = v + 'px';
+    },
+    min: 14,
+    max: 36,
+    step: 1,
+    value: 24,
+  },
+],
+```
+
+- `type` Test title.
+- `css` List of titles of test suites.
+- `name` True if test is succeed, false otherwise.
+- `update` True if test is skipped.
+- `min` Test duration.
+- `max` Pass obj.
+- `step` Pass obj.
+- `value` Pass obj.
+
+#### Custom Properties
+
+Any property can be added to the input and accessed in the template.
+
+### Update Function
+
+Callback function that will fire on update.
+
+```javascript
+update: function(elem, value) {
+  elem.style.fontSize = value + 'px';
+}
+```
 
 ### Templates
 
@@ -76,21 +109,6 @@ templates: [
   },
 ],
 ```
-
-### Props
-
-```html
-<input id="${input.id}" />
-```
-
-- `type` Test title.
-- `css` List of titles of test suites.
-- `name` True if test is succeed, false otherwise.
-- `update` True if test is skipped.
-- `min` Test duration.
-- `max` Pass obj.
-- `step` Pass obj.
-- `value` Pass obj.
 
 ## Themes
 
@@ -137,10 +155,6 @@ templates: [
 ## Contributing
 
 Please read [CONTRIBUTING.md] for details on our code of conduct, and the process for submitting pull requests to us. (coming soon)
-
-## Versioning
-
-We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/your/project/tags). (coming soon)
 
 ## Author
 
