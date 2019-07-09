@@ -53,6 +53,8 @@ readable.options = {
 id="${input.id}"
 ```
 
+#### Range Slider
+
 ```javascript
 inputs: [
   {
@@ -70,7 +72,7 @@ inputs: [
 ],
 ```
 
-#### Basic
+#### Base Properties
 
 - `type` Used to match with template. \*Required
 - `css` CSS class \*Required
@@ -84,11 +86,15 @@ inputs: [
 - `max` Range Slider, Set max value.
 - `step` Range Slider, Set step value.
 
+#### Checkbox
+
+(Coming Soon)
+
 #### Custom Properties
 
 Any property can be added to the input and accessed in the template.
 
-### Update Function
+#### Update Function
 
 Callback function that will fire on update.
 
@@ -163,7 +169,7 @@ Please read [CONTRIBUTING.md] for details on our code of conduct, and the proces
 
 ## Author
 
-- **Kyle Langford** - [kylelangford.com](http://www.kylelangford.com)
+- **Kyle Langford** - [www.kylelangford.com](http://www.kylelangford.com)
 
 ## License
 
