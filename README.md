@@ -1,15 +1,19 @@
-# Readable JS
+# Readable JS (alpha)
 
 An accessiblity plugin Readable.js looks to provide users with the ability to adjust the type as they need while providing developers a toolset to extend.
 
+#### note:
+
+This project is actively being developed. I will remove the (alpha) once everything is documented and cleaned up.
+
 ## Demo
 
-You can see Readable in action at http://www.readable-js.com
+You can see Readable in action at [www.readable-js.com/demo](http://www.readable-js.com/demo)
 
 ## How do I use it?
 
 ```javascript
-// Select a Target Element
+// Select a target to append widget
 var myElement = document.querySelector('.make-readable');
 
 // construct an instance of Readable, passing the element
@@ -18,6 +22,8 @@ var readable = new Readable(myElement);
 // initialise
 readable.init();
 ```
+
+Readble will work out of the box with its default settings. The following is only needed if you want to customize what is provided.
 
 ### Include Script
 
@@ -41,11 +47,11 @@ readable.options = {
 ### Options
 
 - `elem` Set the elements to be targeted.
-- `title` Set Heading for form block.
+- `title` Set block title.
 - `defaultStyles` True or false, enable basic styling.
 - `namespace` Set namespace for component, used to scaffold out component classes.
-- `inputs` Array, create form elements.
-- `templates` Array, match inputs with templates.
+- `inputs` Array, form elements to create.
+- `templates` Array, form element will render using these templates. Type must match.
 
 ### Props
 
@@ -53,7 +59,7 @@ readable.options = {
 id="${input.id}"
 ```
 
-#### Range Slider
+#### Range Sliders
 
 ```javascript
 inputs: [
@@ -69,34 +75,72 @@ inputs: [
     step: 1,
     value: 24,
   },
+  {
+    type: 'range',
+    css: 'word-spacing',
+    name: 'word-spacing',
+    update: function(elem, v) {
+      elem.style.wordSpacing = v + 'em';
+    },
+    min: 0,
+    max: 3,
+    step: 0.1,
+    value: 0,
+  },
+  {
+    type: 'range',
+    css: 'letter-spacing',
+    name: 'letter-spacing',
+    update: function(elem, v) {
+      elem.style.letterSpacing = v / 10 + 'em';
+    },
+    min: 0,
+    max: 3,
+    step: 0.1,
+    value: 0,
+  },
+  {
+    type: 'range',
+    css: 'line-height',
+    name: 'line-height',
+    update: function(elem, v) {
+      elem.style.lineHeight = v;
+    },
+    min: 1,
+    max: 3,
+    step: 0.1,
+    value: 1.4,
+  },
 ],
 ```
 
 #### Base Properties
 
-- `type` Used to match with template. \*Required
-- `css` CSS class \*Required
-- `name` Name of form element \*Required
-- `update` Callback function. \*Required
-- `value` Set initial value. \*Required
+- `type` Used to match with template.
+- `css` CSS class .
+- `name` Name of form element.
+- `update` Callback function.
+- `value` Set initial value.
 
-#### Range Slider
+#### Range Slider Properties
 
-- `min` Range Slider, Set min value.
-- `max` Range Slider, Set max value.
-- `step` Range Slider, Set step value.
+- `min` Set min value.
+- `max` Set max value.
+- `step` Set step value.
 
-#### Checkbox
+#### Checkbox / Toggle
 
 (Coming Soon)
 
+- `labelAsIcon` Add Icon Class to Label.
+
 #### Custom Properties
 
-Any property can be added to the input and accessed in the template.
+Any property can be added to the input and accessed in the template through the input obj.
 
 #### Update Function
 
-Callback function that will fire on update.
+Callback function that will fire on update. Elem refers to Readable.elem, document is available.
 
 ```javascript
 update: function(elem, value) {
@@ -121,7 +165,7 @@ templates: [
 ],
 ```
 
-## Themes
+## Styles
 
 ```scss
 .tools {
@@ -159,11 +203,44 @@ templates: [
 }
 ```
 
+### Themes
+
+Style with css
+
+```css
+.input-group {
+  /* Your Styles */
+}
+.readable--label-fs {
+  /* Your Styles */
+}
+.readable--range-fs {
+  /* Your Styles */
+}
+```
+
+```html
+<div class="input-group range">
+  <label class="readable--label-fs" for="font-size"
+    >Font Size: <span>24</span></label
+  >
+  <input
+    id="readable-range-fs"
+    name="font-size"
+    class="readable--range-fs"
+    type="range"
+    min="14"
+    max="36"
+    step="1"
+  />
+</div>
+```
+
 ## Built With
 
 - Vanilla JS
 
-## Contributing
+## How can I contribute?
 
 Please read [CONTRIBUTING.md] for details on our code of conduct, and the process for submitting pull requests to us. (coming soon)
 

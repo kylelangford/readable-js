@@ -261,10 +261,22 @@ button {
 .monogram {
   border-radius: 50%;
   background-color: #e53b56;
-  padding: 8px;
-  max-width: 50px;
   margin: auto;
+  height: 42px;
+  width: 42px;
+  line-height: 42px;
+  text-align: center;
   display: block;
+  color: white;
+}
+
+.icon-chevron-up.left {
+  &:before {
+    display: block;
+    position: relative;
+    left: -3px;
+    transform: rotate(-90deg);
+  }
 }
 
 .flex {
@@ -359,6 +371,11 @@ button {
     text-align: left;
   }
 
+  ul,
+  ol {
+    font-size: inherit;
+  }
+
   h2 {
     font-size: 3.5em;
     line-height: 1;
@@ -371,6 +388,7 @@ button {
     }
   }
   h3 {
+    margin-top: 48px;
     margin-bottom: 1em;
   }
   p {
@@ -436,6 +454,10 @@ button {
 
   .dark-mode & {
   }
+}
+
+pre.markup {
+  margin-bottom: 48px;
 }
 
 /*

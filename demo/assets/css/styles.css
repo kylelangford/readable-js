@@ -1148,10 +1148,20 @@ button.primary-menu-btn {
 .monogram {
   border-radius: 50%;
   background-color: #e53b56;
-  padding: 8px;
-  max-width: 50px;
   margin: auto;
+  height: 42px;
+  width: 42px;
+  line-height: 42px;
+  text-align: center;
   display: block;
+  color: white;
+}
+
+.icon-chevron-up.left:before {
+  display: block;
+  position: relative;
+  left: -3px;
+  transform: rotate(-90deg);
 }
 
 .flex {
@@ -1230,6 +1240,11 @@ button {
   text-align: left;
 }
 
+.message ul,
+.message ol {
+  font-size: inherit;
+}
+
 .message h2 {
   font-size: 3.5em;
   line-height: 1;
@@ -1247,6 +1262,7 @@ button {
 }
 
 .message h3 {
+  margin-top: 48px;
   margin-bottom: 1em;
 }
 
@@ -1330,6 +1346,10 @@ button {
   top: 0;
   right: -150px;
   cursor: pointer;
+}
+
+pre.markup {
+  margin-bottom: 48px;
 }
 
 /*

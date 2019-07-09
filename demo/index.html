@@ -39,8 +39,8 @@
     <header class="mast-head">
       <!-- 1. Readable.js -->
       <h1>
-        <a class="site-logo" href="/">
-          <div class="monogram icon-terminal"></div></a>
+        <a class="site-logo" href="https://github.com/kylelangford/readable-js">
+          <div class="monogram icon-github"></div></a>
       </h1>
     </header>
 
@@ -53,7 +53,7 @@
             with the ability to adjust the typesetting as needed while providing
             developers a toolset to extend.</p>
             <br>
-              <p><a href="demo.html" class="primary-menu-btn"/>Demo</a></p>
+          <p><a href="demo.html" class="primary-menu-btn"/>Demo</a></p>
         </div>
       </div>
     </section>
@@ -72,62 +72,104 @@ var readable = new Readable(myElement);
 
 // initialise
 readable.init();
-      </code></pre>
 
-          <br />
+          </code></pre>
+
           <h3>How does it work?</h3>
-          <p>Nulla vitae elit libero, a pharetra augue. Cras mattis consectetur purus sit amet fermentum.</p>
+          <p>Readble will work out of the box with its default settings. The following is only needed if you want to customize what is provided.</p>
 
           <pre class="markup"><code class="language-javascript"> 
-readable.options = {
-  elem: '.make-readable p',
-  title: 'Change Typesetting',
-  defaultStyles: true,
-  namespace: 'readable',
-  inputs: [
-    {
-      type: 'range',
-      css: 'font-size',
-      name: 'font-size',
-      update: function(elem, v) {
-        elem.style.fontSize = v + 'px';
+// Pass options to Readable
+var readable = new Readable(myElement, options);
+
+          </code></pre>
+
+          <pre class="markup"><code class="language-javascript"> 
+var options = {
+    elem: '.make-readable p',
+    title: 'Change Typesetting',
+    defaultStyles: true,
+    namespace: 'readable',
+    // Readable will interate through this array and add the markup to the widget
+    inputs: [
+      {
+        type: 'range',
+        css: 'font-size',
+        name: 'font-size',
+        update: function(elem, v) {
+          elem.style.fontSize = v + 'px';
+        },
+        min: 14,
+        max: 36,
+        step: 1,
+        value: 24,
       },
-      min: 14,
-      max: 36,
-      step: 1,
-      value: 24,
-    },
-  ],
-};
-      </code></pre>
+      {
+        type: 'range',
+        css: 'word-spacing',
+        name: 'word-spacing',
+        update: function(elem, v) {
+          elem.style.wordSpacing = v + 'em';
+        },
+        min: 0,
+        max: 3,
+        step: 0.1,
+        value: 0,
+      },
+      {
+        type: 'range',
+        css: 'letter-spacing',
+        name: 'letter-spacing',
+        update: function(elem, v) {
+          elem.style.letterSpacing = v / 10 + 'em';
+        },
+        min: 0,
+        max: 3,
+        step: 0.1,
+        value: 0,
+      },
+      {
+        type: 'range',
+        css: 'line-height',
+        name: 'line-height',
+        update: function(elem, v) {
+          elem.style.lineHeight = v;
+        },
+        min: 1,
+        max: 3,
+        step: 0.1,
+        value: 1.4,
+      },
+    ],
+    // Match these with the inputs above using the type property
+    templates: [
+      {
+        type: 'range',
+        html: `&lt;label class="${input.labelClass}" for="${input.name}"&gt;${input.label} &lt;span>${input.value}&lt;/span>&lt;/label&gt;
+              &lt;input id="${input.id}" name="${input.name}" class="${input.class}" type="range"  min="${input.min}" max="${input.max}" step="${input.step}" /&gt;`,
+      },
+    ]
+  };
 
-          <h3>Options</h3>
-          <p>Nulla vitae elit libero, a pharetra augue. Donec id elit non mi porta gravida at eget metus. Praesent commodo cursus magna, vel scelerisque nisl consectetur et.</p>
+          </code></pre>
 
-          <br />
-          <h3>Themes</h3>
-          <p>Nulla vitae elit libero, a pharetra augue. Cras mattis consectetur purus sit amet fermentum.</p>
-          <br />
           <h3>Documentation</h3>
           <p>Full documentation is available on <a href="https://github.com/kylelangford/readable-js"
-              ><span class="icon icon-list icon-github"></span> Github</a
+              >Github</a
             >.</p>
-          <br />
 
           <h3>New Features Coming Soon</h3>
           <ul>
             <li>Save Setting</li>
-            <li>Presets</li>
             <li>Support for Checkboxes</li>
           </ul>
-          <br />
 
           <h3>How can I contribute?</h3>
           <p>
             If you would like to contribute or submit a bug check out the
             project on
             <a href="https://github.com/kylelangford/readable-js"
-              ><span class="icon icon-list icon-github"></span> Github</a
+              >Github</a
             >
           </p>
         </div>
