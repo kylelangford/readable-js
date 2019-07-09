@@ -47,6 +47,7 @@ readable.options = {
       value: 24,
     },
   ],
+  templates: [],
 };
 ```
 
@@ -61,7 +62,8 @@ templates: [
   },
   {
     type: 'checkbox',
-    html: ``,
+    html: `<input id="${input.id}" type="checkbox" name="${input.name}" value="${input.value}" class="${input.class}" />
+           <label class="${input.labelClass}" for="${input.name}">${input.label}</label>`,
   },
 ],
 ```
@@ -79,18 +81,6 @@ templates: [
   border: 2px solid #dcdcdc;
   border-radius: 3px;
   background-color: white;
-
-  // width: 150px;
-  // height: auto;
-  // overflow: visible;
-  // transition: all .25s ease-in;
-
-  // * {
-  //   transition: all .25s ease-in;
-  // }
-
-  &:focus {
-  }
 
   &:hover {
     cursor: pointer;
@@ -112,7 +102,6 @@ templates: [
 
   .input-slider {
     display: block;
-    // margin: 16px 0
   }
 
   .dark-mode & {
