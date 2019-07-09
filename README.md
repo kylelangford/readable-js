@@ -29,24 +29,24 @@ readable.init();
 
 ```javascript
 readable.options = {
-	elem: '.make-readable p',
-	title: 'Change Typesetting',
-	defaultStyles: true,
-	namespace: 'readable',
-	inputs: [
-		{
-			type: 'range',
-			css: 'font-size',
-			name: 'font-size',
-			update: function(elem, v) {
-				elem.style.fontSize = v + 'px';
-			},
-			min: 14,
-			max: 36,
-			step: 1,
-			value: 24,
-		},
-	],
+  elem: '.make-readable p',
+  title: 'Change Typesetting',
+  defaultStyles: true,
+  namespace: 'readable',
+  inputs: [
+    {
+      type: 'range',
+      css: 'font-size',
+      name: 'font-size',
+      update: function(elem, v) {
+        elem.style.fontSize = v + 'px';
+      },
+      min: 14,
+      max: 36,
+      step: 1,
+      value: 24,
+    },
+  ],
 };
 ```
 
@@ -70,56 +70,56 @@ templates: [
 
 ```css
 .tools {
-	position: absolute;
-	top: 0;
-	right: -170px;
-	z-index: 999;
-	padding: 8px;
-	margin: 8px;
-	border: 2px solid #dcdcdc;
-	border-radius: 3px;
-	background-color: white;
+  position: absolute;
+  top: 0;
+  right: -170px;
+  z-index: 999;
+  padding: 8px;
+  margin: 8px;
+  border: 2px solid #dcdcdc;
+  border-radius: 3px;
+  background-color: white;
 
-	// width: 150px;
-	// height: auto;
-	// overflow: visible;
-	// transition: all .25s ease-in;
+  // width: 150px;
+  // height: auto;
+  // overflow: visible;
+  // transition: all .25s ease-in;
 
-	// * {
-	//   transition: all .25s ease-in;
-	// }
+  // * {
+  //   transition: all .25s ease-in;
+  // }
 
-	&:focus {
-	}
+  &:focus {
+  }
 
-	&:hover {
-		cursor: pointer;
-	}
+  &:hover {
+    cursor: pointer;
+  }
 }
 
 .input-group {
-	margin-top: 8px;
-	margin-bottom: 8px;
+  margin-top: 8px;
+  margin-bottom: 8px;
 
-	label {
-		font-size: 12px;
-		font-weight: bold;
-	}
+  label {
+    font-size: 12px;
+    font-weight: bold;
+  }
 
-	.input-radio {
-		display: inline-block;
-	}
+  .input-radio {
+    display: inline-block;
+  }
 
-	.input-slider {
-		display: block;
-		// margin: 16px 0
-	}
+  .input-slider {
+    display: block;
+    // margin: 16px 0
+  }
 
-	.dark-mode & {
-		label {
-			color: white;
-		}
-	}
+  .dark-mode & {
+    label {
+      color: white;
+    }
+  }
 }
 ```
 
@@ -137,7 +137,7 @@ We use [SemVer](http://semver.org/) for versioning. For the versions available, 
 
 ## Author
 
-- **Kyle Langford** - [kylelangford.com](http://kylelangford.com)
+- **Kyle Langford** - [kylelangford.com](http://www.kylelangford.com)
 
 ## License
 
