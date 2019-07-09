@@ -3,90 +3,142 @@
 An accessiblity plugin Readable.js looks to provide users with the ability to adjust the type as they need while providing developers a toolset to extend.
 
 ##Demo
-You can see rainbow in action at http://readable-js.com
+You can see Readable in action at http://readable-js.com
 
-You can also build/download custom packages from there.
+##How do I use it?
 
-## Getting Started
+```javascript
+// Select a Target Element
+var myElement = document.querySelector('.make-readable');
 
-These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
+// construct an instance of Readable, passing the element
+var readable = new Readable(myElement);
 
-### Prerequisites
-
-What things you need to install the software and how to install them
-
-```
-Give examples
-```
-
-### Installing
-
-A step by step series of examples that tell you how to get a development env running
-
-Resolve Dependencies
-
-```
-npm install
+// initialise
+readable.init();
 ```
 
-Build Local Server
+###Include Script
 
-```
-gulp
-```
-
-End with an example of getting some data out of the system or using it for a little demo
-
-## Running the tests
-
-Explain how to run the automated tests for this system
-
-### Break down into end to end tests
-
-Explain what these tests test and why
-
-```
-Give an example
+```html
+<script src="assets/js/scripts.min.js"></script>
 ```
 
-### And coding style tests
+##How does it work?
 
-Explain what these tests test and why
-
+```javascript
+readable.options = {
+	elem: '.make-readable p',
+	title: 'Change Typesetting',
+	defaultStyles: true,
+	namespace: 'readable',
+	inputs: [
+		{
+			type: 'range',
+			css: 'font-size',
+			name: 'font-size',
+			update: function(elem, v) {
+				elem.style.fontSize = v + 'px';
+			},
+			min: 14,
+			max: 36,
+			step: 1,
+			value: 24,
+		},
+	],
+};
 ```
-Give an example
+
+## Templates
+
+```javascript
+templates: [
+  {
+    type: 'range',
+    html: `<label class="${input.labelClass}" for="${input.name}">${input.label} <span>${input.value}</span></label>
+           <input id="${input.id}" name="${input.name}" class="${input.class}" type="range"  min="${input.min}" max="${input.max}" step="${input.step}" />`,
+  },
+  {
+    type: 'checkbox',
+    html: ``,
+  },
+],
 ```
 
-## Deployment
+## Themes
 
-Add additional notes about how to deploy this on a live system
+```css
+.tools {
+	position: absolute;
+	top: 0;
+	right: -170px;
+	z-index: 999;
+	padding: 8px;
+	margin: 8px;
+	border: 2px solid #dcdcdc;
+	border-radius: 3px;
+	background-color: white;
+
+	// width: 150px;
+	// height: auto;
+	// overflow: visible;
+	// transition: all .25s ease-in;
+
+	// * {
+	//   transition: all .25s ease-in;
+	// }
+
+	&:focus {
+	}
+
+	&:hover {
+		cursor: pointer;
+	}
+}
+
+.input-group {
+	margin-top: 8px;
+	margin-bottom: 8px;
+
+	label {
+		font-size: 12px;
+		font-weight: bold;
+	}
+
+	.input-radio {
+		display: inline-block;
+	}
+
+	.input-slider {
+		display: block;
+		// margin: 16px 0
+	}
+
+	.dark-mode & {
+		label {
+			color: white;
+		}
+	}
+}
+```
 
 ## Built With
 
-- [Dropwizard](http://www.dropwizard.io/1.0.2/docs/) - The web framework used
-- [Maven](https://maven.apache.org/) - Dependency Management
-- [ROME](https://rometools.github.io/rome/) - Used to generate RSS Feeds
+- Vanilla JS
 
 ## Contributing
 
-Please read [CONTRIBUTING.md](https://gist.github.com/PurpleBooth/b24679402957c63ec426) for details on our code of conduct, and the process for submitting pull requests to us.
+Please read [CONTRIBUTING.md] for details on our code of conduct, and the process for submitting pull requests to us. (coming soon)
 
 ## Versioning
 
-We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/your/project/tags).
+We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/your/project/tags). (coming soon)
 
-## Authors
+## Author
 
-- **Billie Thompson** - _Initial work_ - [PurpleBooth](https://github.com/PurpleBooth)
-
-See also the list of [contributors](https://github.com/your/project/contributors) who participated in this project.
+- **Kyle Langford** - [kylelangford.com](http://kylelangford.com)
 
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
 
-## Acknowledgments
-
-- Hat tip to anyone whose code was used
-- Inspiration
-- etc
