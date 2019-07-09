@@ -2,10 +2,11 @@
 
 An accessiblity plugin Readable.js looks to provide users with the ability to adjust the type as they need while providing developers a toolset to extend.
 
-##Demo
+## Demo
+
 You can see Readable in action at http://readable-js.com
 
-##How do I use it?
+## How do I use it?
 
 ```javascript
 // Select a Target Element
@@ -18,13 +19,13 @@ var readable = new Readable(myElement);
 readable.init();
 ```
 
-###Include Script
+### Include Script
 
 ```html
 <script src="assets/js/scripts.min.js"></script>
 ```
 
-##How does it work?
+## How does it work?
 
 ```javascript
 readable.options = {
@@ -141,4 +142,3 @@ We use [SemVer](http://semver.org/) for versioning. For the versions available, 
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
-
