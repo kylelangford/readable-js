@@ -40,12 +40,12 @@ readable.options = {
 
 ### Options
 
-- `elem` Test title.
-- `title` List of titles of test suites.
-- `defaultStyles` True if test is succeed, false otherwise.
-- `namespace` True if test is skipped.
-- `inputs` Test duration.
-- `templates` Pass obj.
+- `elem` Set the elements to be targeted.
+- `title` Set Heading for form block.
+- `defaultStyles` True or false, enable basic styling.
+- `namespace` Set namespace for component, used to scaffold out component classes.
+- `inputs` Array, create form elements.
+- `templates` Array, match inputs with templates.
 
 ### Props
 
@@ -70,14 +70,14 @@ inputs: [
 ],
 ```
 
-- `type` Test title.
-- `css` List of titles of test suites.
-- `name` True if test is succeed, false otherwise.
-- `update` True if test is skipped.
-- `min` Test duration.
-- `max` Pass obj.
-- `step` Pass obj.
-- `value` Pass obj.
+- `type` Used to match with template. \*Required
+- `css` CSS class \*Required
+- `name` Name of form element \*Required
+- `update` Callback function. \*Required
+- `min` Range Slider, Set min value.
+- `max` Range Slider, Set max value.
+- `step` Range Slider, Set step value.
+- `value` Set initial value. \*Required
 
 #### Custom Properties
 
