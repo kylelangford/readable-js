@@ -22,7 +22,7 @@ readable.init();
 ### Include Script
 
 ```html
-<script src="assets/js/scripts.min.js"></script>
+<script src="assets/js/readable.min.js"></script>
 ```
 
 ## How does it work?
@@ -51,7 +51,16 @@ readable.options = {
 };
 ```
 
-## Templates
+### Options
+
+- `elem` Test title.
+- `title` List of titles of test suites.
+- `defaultStyles` True if test is succeed, false otherwise.
+- `namespace` True if test is skipped.
+- `inputs` Test duration.
+- `templates` Pass obj.
+
+### Templates
 
 ```javascript
 templates: [
@@ -70,9 +79,18 @@ templates: [
 
 ### Props
 
+```html
+<input id="${input.id}" />
 ```
-id="${input.id}"
-```
+
+- `type` Test title.
+- `css` List of titles of test suites.
+- `name` True if test is succeed, false otherwise.
+- `update` True if test is skipped.
+- `min` Test duration.
+- `max` Pass obj.
+- `step` Pass obj.
+- `value` Pass obj.
 
 ## Themes
 
@@ -108,12 +126,6 @@ id="${input.id}"
 
   .input-slider {
     display: block;
-  }
-
-  .dark-mode & {
-    label {
-      color: white;
-    }
   }
 }
 ```
