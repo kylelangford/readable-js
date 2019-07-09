@@ -70,14 +70,19 @@ inputs: [
 ],
 ```
 
+#### Basic
+
 - `type` Used to match with template. \*Required
 - `css` CSS class \*Required
 - `name` Name of form element \*Required
 - `update` Callback function. \*Required
+- `value` Set initial value. \*Required
+
+#### Range Slider
+
 - `min` Range Slider, Set min value.
 - `max` Range Slider, Set max value.
 - `step` Range Slider, Set step value.
-- `value` Set initial value. \*Required
 
 #### Custom Properties
 
