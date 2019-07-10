@@ -206,12 +206,21 @@ templates: {
 Style with css
 
 ```css
+/* Wrapper */
 .input-group {
   /* Your Styles */
 }
+
+/* Convention */
+.[namespace]--[elem]-[name-acronym] {
+  /* Your Styles */
+}
+
+/* Font size range slider example */
 .readable--label-fs {
   /* Your Styles */
 }
+
 .readable--range-fs {
   /* Your Styles */
 }
