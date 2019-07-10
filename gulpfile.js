@@ -134,7 +134,7 @@ function watch() {
     .watch(['./demo/src/scss/**/*.scss'])
     .on('change', gulp.series(css, browser.reload));
   gulp
-    .watch(['./demo/src/js/**/*.js', './src/js/*.js'])
+    .watch(['./demo/src/js/**/*.js', './src/*.js'])
     .on('change', gulp.series(js, browser.reload));
   gulp.watch(['./demo/*.html']).on('change', gulp.series(browser.reload));
 }
