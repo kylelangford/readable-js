@@ -61,11 +61,17 @@
     this.value = b.object[b.property];
 
     this.valueGetter = function() {
+      console.log('get', _this.value);
       return _this.value;
     };
 
     this.valueSetter = function(val) {
+      console.log('set', _this.value);
+      console.log('set', val); // This is a string
+
       _this.value = val;
+      console.log('bind', _this.value);
+
       for (var i = 0; i < _this.elementBindings.length; i++) {
         var binding = _this.elementBindings[i];
         binding.element[binding.attribute] = val;
@@ -77,12 +83,14 @@
         element: element,
         attribute: attribute,
       };
+
       if (event) {
         element.addEventListener(event, function(event) {
-          _this.valueSetter(element[attribute]);
+          _this.valueSetter(parseInt(element[attribute]));
         });
         binding.event = event;
       }
+
       this.elementBindings.push(binding);
       element[attribute] = _this.value;
       return _this;
@@ -96,34 +104,12 @@
     b.object[b.property] = this.value;
   };
 
-  // Generic class:
-  // function LogSlider(options) {
-  //   options = options || {};
-  //   this.minpos = options.minpos || 0;
-  //   this.maxpos = options.maxpos || 100;
-  //   this.minlval = Math.log(options.minval || 1);
-  //   this.maxlval = Math.log(options.maxval || 100000);
-
-  //   this.scale = (this.maxlval - this.minlval) / (this.maxpos - this.minpos);
-  // }
-
-  // LogSlider.prototype = {
-  //   // Calculate value from a slider position
-  //   value: function(position) {
-  //     return Math.exp((position - this.minpos) * this.scale + this.minlval);
-  //   },
-  //   // Calculate slider position from a value
-  //   position: function(value) {
-  //     return this.minpos + (Math.log(value) - this.minlval) / this.scale;
-  //   },
-  // };
-
   /**
    * Get/Set Settings
    * @private
    */
   function setSettings(options) {
-    console.log('saved');
+    console.log('set', options);
     // Put the object into storage
     localStorage.setItem('readableSettings', JSON.stringify(options));
   }
@@ -131,6 +117,8 @@
   function getSettings() {
     // Retrieve the object from storage
     var retrievedSettings = localStorage.getItem('readableSettings');
+    retrievedSettings = JSON.parse(retrievedSettings);
+    console.log('get', retrievedSettings);
     return retrievedSettings;
   }
 
@@ -171,13 +159,13 @@
    */
   function Readable(elem, options) {
     // Check for Saved Settings
-    // var settings = this.getSettings();
-    // settings = JSON.parse(settings);
-    // if (settings) {
-    // Update Settings
-    // } else {
-    options = extend(options, Readable.options);
-    // }
+    var settings = getSettings();
+
+    if (settings) {
+      options = settings;
+    } else {
+      options = extend(options, Readable.options);
+    }
 
     // Store Options
     this.initialised = false;
@@ -185,10 +173,9 @@
     this.namespace = options.namespace;
     this.elem = this.elem;
     this.title = options.title;
-    // this.addRules = options.addRules;
-    // this.presets = options.addRules;
+    this.addRules = options.addRules;
+    this.presets = options.presets;
     this.defaultStyles = options.defaultStyles;
-    // Scaffold out classes / ids
     this.inputs = options.inputs.map(function(input) {
       input.id =
         options.namespace + '-' + input.type + '-' + acronym(input.name);
@@ -259,11 +246,11 @@
         // Add Input Container
         widget.appendChild(inputList);
 
-        // if(presets) {
-        //   // Add Button
-        //   button.id = 'save';
-        //   button.innerHTML = 'Save';
-        //   widget.appendChild(button);
+        // if (presets) {
+        // Add Button
+        button.id = 'save';
+        button.innerHTML = 'Save';
+        widget.appendChild(button);
         // }
 
         // Add Markup to Page
@@ -273,6 +260,14 @@
       } else {
         // throw err
       }
+    },
+
+    addPresets: function() {
+      let presets = [
+        { name: 'Design', age: 2 },
+        { name: 'Big', age: 8 },
+        { name: 'Small', age: 1 },
+      ];
     },
 
     /**
@@ -290,42 +285,15 @@
       // Add Inputs
       inputs.forEach(function(input, index) {
         let markup = document.createElement('div');
+        var type = input.type;
+        var render = Readable.options.templates[type];
+
         markup.classList.add('input-group');
-
-        // spread operator to print attributes
-        const range = `
-          <label class="${input.labelClass}" for="${input.name}">${input.label} <span>${input.value}</span></label>
-          <input id="${input.id}" name="${input.name}" class="${input.class}" type="range"  min="${input.min}" max="${input.max}" step="${input.step}" />
-        `;
-
-        // Usage:
-        // var logsl = new LogSlider({
-        //   maxpos: 20,
-        //   minval: 100,
-        //   maxval: 10000000,
-        // });
-
-        // const checkbox = `
-        //   <input id="${input.id}" type="checkbox" name="${input.name}" value="${input.value}" class="${input.class}" />
-        //   <label class="${input.labelClass}" for="${input.name}">${input.label}</label>
-        // `;
-
-        // if range
-        // if (input.type == 'range') {
-        markup.innerHTML = range;
+        markup.innerHTML = render(input);
         markup.classList.add('range');
-        // } else {
-        //   markup.innerHTML = checkbox;
-        //   markup.classList.add('checkbox');
-        // }
-
         // Add Markup
         container.appendChild(markup);
       });
-
-      // if tics
-      // this.addTics();
-      //
 
       // Bind Inputs
       this.bindInputs(inputs);
@@ -341,7 +309,6 @@
         var myInput = document.getElementById(input.id);
         var myLabel = document.querySelector(selector);
         var styleBind = document.querySelector('.make-readable p');
-        console.log(styleBind);
 
         new Binding({
           object: Readable.options.inputs[index],
@@ -359,6 +326,7 @@
     attachEvent: function() {
       if (!this.initialised) {
         this.initialised = true;
+        var _this = this;
 
         var signal = new CustomEvent('bang');
 
@@ -366,13 +334,6 @@
          * https://javascript.info/bubbling-and-capturing
          * https://gomakethings.com/listening-for-click-events-with-vanilla-javascript/
          */
-
-        // Log Slider
-
-        // $('#slider').on('change', function() {
-        //    var val = logsl.value(+$(this).val());
-        //    $('#value').val(val.toFixed(0));
-        // });
 
         document.addEventListener(
           'change',
@@ -387,7 +348,6 @@
             // Don't follow the link
             event.preventDefault();
 
-            // Can I bind to the style directly
             inputs.forEach(function(input) {
               if (event.target.matches('#' + input.id)) {
                 targetElem.forEach(function(elem) {
@@ -395,17 +355,6 @@
                 });
               }
             });
-
-            // if (event.target.matches('#checkbox-jt')) {
-            //   var isChecked = document.getElementById('elementName').checked;
-            //   if (isChecked) {
-            //     //checked
-            //     // add Class
-            //   } else {
-            //     //unchecked
-            //     // Remove Class
-            //   }
-            // }
           },
           false
         );
@@ -414,34 +363,13 @@
           'click',
           function(event) {
             if (event.target.matches('#save')) {
-              setSettings(Readable.options);
+              setSettings(_this);
             }
           },
           false
         );
       }
     },
-
-    // addPresets: function() {
-    // let presets = [
-    //   { name: 'Design', age: 2 },
-    //   { name: 'Big', age: 8 },
-    //   { name: 'Small', age: 1 },
-    // ];
-    // const select = `
-    //   <div class="input-group select">
-    //   <label for="${input.name}">${input.label}</label>
-    //   <select>
-    //       ${presets.map(
-    //         preset =>
-    //           `<option value=${presets.name}>${
-    //             presets.name
-    //           } is ${presets.age * 7}</option>`
-    //       )}
-    //   </select>
-    //   </div>
-    // `;
-    // },
 
     addDefaultStyles: function() {
       // Default Styles
@@ -521,9 +449,9 @@
     elem: '.make-readable p',
     title: 'Change Typesetting',
     defaultStyles: true,
-    // presets: false,
-    // addRules: true,
+    addRules: true,
     namespace: 'readable',
+    presets: [],
     inputs: [
       {
         type: 'range',
@@ -578,19 +506,42 @@
       //   css: 'align',
       //   name: 'justify-type',
       //   value: null,
+      //   update: function(elem) {
+      //     var isChecked = document.getElementById('elementName').checked;
+
+      //     if (isChecked) {
+      //       elem.classList.add('active');
+      //     } else {
+      //       elem.classList.remove('active');
+      //     }
+      //   },
       // },
     ],
-    // templates: [
-    //   {
-    //     type: 'range',
-    //     html: `<label class="${input.labelClass}" for="${input.name}">${input.label} <span>${input.value}</span></label>
-    //            <input id="${input.id}" name="${input.name}" class="${input.class}" type="range"  min="${input.min}" max="${input.max}" step="${input.step}" />`,
-    //   },
-    //   {
-    //     type: 'checkbox',
-    //     html: ``,
-    //   },
-    // ],
+    templates: {
+      range: function(input) {
+        return `<label class="${input.labelClass}" for="${input.name}">${input.label} <span>${input.value}</span></label>
+                <input id="${input.id}" name="${input.name}" class="${input.class}" type="range"  min="${input.min}" max="${input.max}" step="${input.step}" />`;
+      },
+      checkbox: function(input) {
+        return `<label class="${input.labelClass}" for="${input.name}">${input.label}</label>
+                <input id="${input.id}" type="checkbox" name="${input.name}" value="${input.value}" class="${input.class}" />`;
+      },
+      select: function(input) {
+        return `
+        <div class="input-group select">
+        <label for="${input.name}">${input.label}</label>
+        <select>
+            ${presets.map(
+              preset =>
+                `<option value=${presets.name}>${
+                  presets.name
+                } is ${presets.age * 7}</option>`
+            )}
+        </select>
+        </div>
+      `;
+      },
+    },
   };
 
   Readable.isSupported =
