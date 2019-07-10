@@ -61,17 +61,11 @@
     this.value = b.object[b.property];
 
     this.valueGetter = function() {
-      console.log('get', _this.value);
       return _this.value;
     };
 
     this.valueSetter = function(val) {
-      console.log('set', _this.value);
-      console.log('set', val); // This is a string
-
       _this.value = val;
-      console.log('bind', _this.value);
-
       for (var i = 0; i < _this.elementBindings.length; i++) {
         var binding = _this.elementBindings[i];
         binding.element[binding.attribute] = val;
@@ -109,16 +103,14 @@
    * @private
    */
   function setSettings(options) {
-    console.log('set', options);
     // Put the object into storage
-    localStorage.setItem('readableSettings', JSON.stringify(options));
+    localStorage.setItem('readableSettings', JSON.stringify(options, null, 2));
   }
 
   function getSettings() {
     // Retrieve the object from storage
     var retrievedSettings = localStorage.getItem('readableSettings');
     retrievedSettings = JSON.parse(retrievedSettings);
-    console.log('get', retrievedSettings);
     return retrievedSettings;
   }
 
@@ -161,8 +153,12 @@
     // Check for Saved Settings
     var settings = getSettings();
 
+    console.log('settings', settings);
+    console.log('Readable', Readable.options);
+
     if (settings) {
-      options = settings;
+      settings.elem = this.elem;
+      options = extend(options, settings);
     } else {
       options = extend(options, Readable.options);
     }
@@ -171,7 +167,7 @@
     this.initialised = false;
     this.targetClass = elem;
     this.namespace = options.namespace;
-    this.elem = this.elem;
+    this.elem = this.elem; // This is not being recorded in the save
     this.title = options.title;
     this.addRules = options.addRules;
     this.presets = options.presets;
@@ -185,6 +181,8 @@
       input.labelClass = options.namespace + '--label-' + acronym(input.name);
       return input;
     });
+
+    console.log('this', this);
   }
 
   Readable.prototype = {
@@ -210,6 +208,8 @@
       // potentially restoring previous scroll position
       // setTimeout(this.attachEvent.bind(this), 100);
       setTimeout(this.attachEvent.bind(this), 100);
+
+      console.log('init this', this);
 
       return this;
     },
@@ -246,12 +246,10 @@
         // Add Input Container
         widget.appendChild(inputList);
 
-        // if (presets) {
         // Add Button
         button.id = 'save';
         button.innerHTML = 'Save';
         widget.appendChild(button);
-        // }
 
         // Add Markup to Page
         target.appendChild(widget);
