@@ -151,18 +151,16 @@ update: function(elem, value) {
 ### Templates
 
 ```javascript
-templates: [
-  {
-    type: 'range',
-    html: `<label class="${input.labelClass}" for="${input.name}">${input.label} <span>${input.value}</span></label>
-           <input id="${input.id}" name="${input.name}" class="${input.class}" type="range"  min="${input.min}" max="${input.max}" step="${input.step}" />`,
+templates: {
+  range: function(input) {
+    return `<label class="${input.labelClass}" for="${input.name}">${input.label} <span>${input.value}</span></label>
+            <input id="${input.id}" name="${input.name}" class="${input.class}" type="range"  min="${input.min}" max="${input.max}" step="${input.step}" />`;
   },
-  {
-    type: 'checkbox',
-    html: `<input id="${input.id}" type="checkbox" name="${input.name}" value="${input.value}" class="${input.class}" />
-           <label class="${input.labelClass}" for="${input.name}">${input.label}</label>`,
+  checkbox: function(input) {
+    return `<label class="${input.labelClass}" for="${input.name}">${input.label}</label>
+            <input id="${input.id}" type="checkbox" name="${input.name}" value="${input.value}" class="${input.class}" />`;
   },
-],
+},
 ```
 
 ## Styles
