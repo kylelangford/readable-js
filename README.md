@@ -191,11 +191,11 @@ templates: {
     font-weight: bold;
   }
 
-  .input-radio {
+  input[type='radio'] {
     display: inline-block;
   }
 
-  .input-slider {
+  input[type='range'] {
     display: block;
   }
 }
@@ -212,7 +212,7 @@ Style with css
 }
 
 /* Convention */
-.[namespace]--[elem]-[name-acronym] {
+.[namespace]--[element]-[name-acronym] {
   /* Your Styles */
 }
 
