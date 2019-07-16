@@ -47,11 +47,11 @@
     <section class="panel">
       <div class="wrap flex">
         <div class="message">
-          <h2>Readable.js (alpha)</h2>
+          <h2>Readable.js</h2>
           <p>
             A modern accessiblity plugin, Readable.js looks to provide users
             with the ability to adjust the typesetting as needed while providing
-            developers a toolset to extend.</p>
+            developers a toolset to extend. <small>v0.1.0</small></p>
             <br>
           <p><a href="demo.html" class="primary-menu-btn"/>Demo</a></p>
         </div>
@@ -63,94 +63,99 @@
         <div class="message">
 
           <h3>How do I use it?</h3>
-          <pre class="markup"><code class="language-javascript"> 
-// Select a Target Element
-var myElement = document.querySelector('.make-readable');
-
-// construct an instance of Readable, passing the element
-var readable = new Readable(myElement);
-
-// initialise
-readable.init();
-
+          <pre class="markup"><code class="language-html"> 
+&lt;script src="assets/js/readable-js.min.js"&gt;&lt;/script&gt;
           </code></pre>
+
 
           <h3>How does it work?</h3>
           <p>Readble will work out of the box with its default settings. The following is only needed if you want to customize what is provided.</p>
 
           <pre class="markup"><code class="language-javascript"> 
-// Pass options to Readable
-var readable = new Readable(myElement, options);
+// Select a Target Element
+var parent = document.querySelector('.make-readable');
+var elements = document.querySelectorAll('.make-readable p');
+
+// construct an instance of Readable, passing the element
+var readable = new Readable(parent, elements, /* options */);
+
+// initialise
+readable.init();
 
           </code></pre>
-
           <pre class="markup"><code class="language-javascript"> 
+
 var options = {
-    elem: '.make-readable p',
-    title: 'Change Typesetting',
-    defaultStyles: true,
-    namespace: 'readable',
-    // Readable will interate through this array and add the markup to the widget
-    inputs: [
-      {
-        type: 'range',
-        css: 'font-size',
-        name: 'font-size',
-        update: function(elem, v) {
+  parent: '.message',
+  title: 'Change Typesetting',
+  defaultStyles: true,
+  addRules: true,
+  namespace: 'readable',
+  elements: [],
+  inputs: [
+    {
+      type: 'range',
+      css: 'font-size',
+      name: 'font-size',
+      update: function(elements, v) {
+        elements.forEach(function(elem) {
           elem.style.fontSize = v + 'px';
-        },
-        min: 14,
-        max: 36,
-        step: 1,
-        value: 24,
+        });
       },
-      {
-        type: 'range',
-        css: 'word-spacing',
-        name: 'word-spacing',
-        update: function(elem, v) {
-          elem.style.wordSpacing = v + 'em';
-        },
-        min: 0,
-        max: 3,
-        step: 0.1,
-        value: 0,
-      },
-      {
-        type: 'range',
-        css: 'letter-spacing',
-        name: 'letter-spacing',
-        update: function(elem, v) {
-          elem.style.letterSpacing = v / 10 + 'em';
-        },
-        min: 0,
-        max: 3,
-        step: 0.1,
-        value: 0,
-      },
-      {
-        type: 'range',
-        css: 'line-height',
-        name: 'line-height',
-        update: function(elem, v) {
-          elem.style.lineHeight = v;
-        },
-        min: 1,
-        max: 3,
-        step: 0.1,
-        value: 1.4,
-      },
-    ],
-    // Match these with the inputs above using the type property
-    templates: {
-      range: `&lt;label class="${input.labelClass}" for="${input.name}"&gt;${input.label} &lt;span>${input.value}&lt;/span>&lt;/label&gt;
-            &lt;input id="${input.id}" name="${input.name}" class="${input.class}" type="range"  min="${input.min}" max="${input.max}" step="${input.step}" /&gt;`,
+      min: 14,
+      max: 36,
+      step: 1,
+      value: 24,
     },
-  };
-
-
-
-
+    {
+      type: 'range',
+      css: 'word-spacing',
+      name: 'word-spacing',
+      update: function(elements, v) {
+        elements.forEach(function(elem) {
+          elem.style.wordSpacing = v + 'em';
+        });
+      },
+      min: 0,
+      max: 3,
+      step: 0.1,
+      value: 0,
+    },
+    {
+      type: 'range',
+      css: 'letter-spacing',
+      name: 'letter-spacing',
+      update: function(elements, v) {
+        elements.forEach(function(elem) {
+          elem.style.letterSpacing = v / 10 + 'em';
+        });
+      },
+      min: 0,
+      max: 3,
+      step: 0.1,
+      value: 0,
+    },
+    {
+      type: 'range',
+      css: 'line-height',
+      name: 'line-height',
+      update: function(elements, v) {
+        elements.forEach(function(elem) {
+          elem.style.lineHeight = v;
+        });
+      },
+      min: 1,
+      max: 3,
+      step: 0.1,
+      value: 1.4,
+    },
+  ],
+  // Match these with the inputs above using the type property
+  templates: {
+    range: `&lt;label class="${input.labelClass}" for="${input.name}"&gt;${input.label} &lt;span>${input.value}&lt;/span>&lt;/label&gt;
+          &lt;input id="${input.id}" name="${input.name}" class="${input.class}" type="range"  min="${input.min}" max="${input.max}" step="${input.step}" /&gt;`,
+  },
+};
           </code></pre>
 
           <h3>Documentation</h3>
@@ -160,7 +165,6 @@ var options = {
 
           <h3>New Features Coming Soon</h3>
           <ul>
-            <li>Save Setting</li>
             <li>Support for Checkboxes</li>
           </ul>
 

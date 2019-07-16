@@ -8,8 +8,10 @@
 
 	// construct an instance of Readable, passing the element
 	// var readable = new Readable(parent, elements, options);
-	var readable = new Readable(parent, elements);
+	if (parent) {
+		var readable = new Readable(parent, elements);
 
-	// initialise
-	readable.init();
+		// initialise
+		readable.init();
+	}
 })();
