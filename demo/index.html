@@ -142,14 +142,14 @@ var options = {
       },
     ],
     // Match these with the inputs above using the type property
-    templates: [
-      {
-        type: 'range',
-        html: `&lt;label class="${input.labelClass}" for="${input.name}"&gt;${input.label} &lt;span>${input.value}&lt;/span>&lt;/label&gt;
-              &lt;input id="${input.id}" name="${input.name}" class="${input.class}" type="range"  min="${input.min}" max="${input.max}" step="${input.step}" /&gt;`,
-      },
-    ]
+    templates: {
+      range: `&lt;label class="${input.labelClass}" for="${input.name}"&gt;${input.label} &lt;span>${input.value}&lt;/span>&lt;/label&gt;
+            &lt;input id="${input.id}" name="${input.name}" class="${input.class}" type="range"  min="${input.min}" max="${input.max}" step="${input.step}" /&gt;`,
+    },
   };
+
+
+
 
           </code></pre>
 

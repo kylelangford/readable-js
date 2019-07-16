@@ -3,9 +3,13 @@
 	document.querySelector('body').classList.add('tween');
 
 	// grab an element
-	var myElement = document.querySelector('.make-readable');
-	// construct an instance of Headroom, passing the element
-	var readable = new Readable(myElement);
+	var parent = document.querySelector('.make-readable');
+	var elements = document.querySelectorAll('.make-readable p');
+
+	// construct an instance of Readable, passing the element
+	// var readable = new Readable(parent, elements, options);
+	var readable = new Readable(parent, elements);
+
 	// initialise
 	readable.init();
 })();

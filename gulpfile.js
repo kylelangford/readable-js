@@ -17,8 +17,8 @@ var cssOutPutStyle = 'expanded';
 // Tasks
 gulp.task('css', gulp.series(css));
 gulp.task('build', gulp.series(css, js));
-gulp.task('publish', gulp.series(publish, publishMinified));
 gulp.task('default', gulp.series('build', server, watch));
+gulp.task('publish', gulp.series(publish, publishMinified));
 
 function createErrorHandler(name) {
   return function(err) {

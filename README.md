@@ -14,10 +14,11 @@ You can see Readable in action at [www.readable-js.com/demo](http://www.readable
 
 ```javascript
 // Select a target to append widget
-var myElement = document.querySelector('.make-readable');
+var parent = document.querySelector('.make-readable');
+var elements = document.querySelectorAll('.make-readable p');
 
 // construct an instance of Readable, passing the element
-var readable = new Readable(myElement);
+var readable = new Readable(parent, elements, options);
 
 // initialise
 readable.init();
@@ -35,22 +36,25 @@ Readble will work out of the box with its default settings. The following is onl
 
 ```javascript
 readable.options = {
-  elem: '.make-readable p',
+  parent: '.message',
+  namespace: 'readable',
   title: 'Change Typesetting',
   defaultStyles: true,
-  namespace: 'readable',
+  addRules: true,
   inputs: [],
+  elements: [],
   templates: [],
 };
 ```
 
 ### Options
 
-- `elem` Set the elements to be targeted.
+- `parent` Set where the widget will be appended.
+- `namespace` Set namespace for component, used to scaffold out component classes.
 - `title` Set block title.
 - `defaultStyles` True or false, enable basic styling.
-- `namespace` Set namespace for component, used to scaffold out component classes.
 - `inputs` Array, form elements to create.
+- `elements` Array, elements to style.
 - `templates` Array, form element will render using these templates. Type must match.
 
 ### Props
@@ -67,8 +71,10 @@ inputs: [
     type: 'range',
     css: 'font-size',
     name: 'font-size',
-    update: function(elem, v) {
-      elem.style.fontSize = v + 'px';
+    update: function(elements, v) {
+      elements.forEach(function(elem) {
+        elem.style.fontSize = v + 'px';
+      });
     },
     min: 14,
     max: 36,
@@ -79,8 +85,10 @@ inputs: [
     type: 'range',
     css: 'word-spacing',
     name: 'word-spacing',
-    update: function(elem, v) {
-      elem.style.wordSpacing = v + 'em';
+    update: function(elements, v) {
+      elements.forEach(function(elem) {
+        elem.style.wordSpacing = v + 'em';
+      });
     },
     min: 0,
     max: 3,
@@ -91,8 +99,10 @@ inputs: [
     type: 'range',
     css: 'letter-spacing',
     name: 'letter-spacing',
-    update: function(elem, v) {
-      elem.style.letterSpacing = v / 10 + 'em';
+    update: function(elements, v) {
+      elements.forEach(function(elem) {
+        elem.style.letterSpacing = v / 10 + 'em';
+      });
     },
     min: 0,
     max: 3,
@@ -103,8 +113,10 @@ inputs: [
     type: 'range',
     css: 'line-height',
     name: 'line-height',
-    update: function(elem, v) {
-      elem.style.lineHeight = v;
+    update: function(elements, v) {
+      elements.forEach(function(elem) {
+        elem.style.lineHeight = v;
+      });
     },
     min: 1,
     max: 3,
@@ -128,12 +140,6 @@ inputs: [
 - `max` Set max value.
 - `step` Set step value.
 
-#### Checkbox / Toggle
-
-(Coming Soon)
-
-- `labelAsIcon` Add Icon Class to Label.
-
 #### Custom Properties
 
 Any property can be added to the input and accessed in the template through the input obj.
@@ -143,9 +149,11 @@ Any property can be added to the input and accessed in the template through the 
 Callback function that will fire on update. Elem refers to Readable.elem, document is available.
 
 ```javascript
-update: function(elem, value) {
-  elem.style.fontSize = value + 'px';
-}
+update: function(elements, v) {
+  elements.forEach(function(elem) {
+    elem.style.fontSize = v + 'px';
+  });
+},
 ```
 
 ### Templates
@@ -155,10 +163,6 @@ templates: {
   range: function(input) {
     return `<label class="${input.labelClass}" for="${input.name}">${input.label} <span>${input.value}</span></label>
             <input id="${input.id}" name="${input.name}" class="${input.class}" type="range"  min="${input.min}" max="${input.max}" step="${input.step}" />`;
-  },
-  checkbox: function(input) {
-    return `<label class="${input.labelClass}" for="${input.name}">${input.label}</label>
-            <input id="${input.id}" type="checkbox" name="${input.name}" value="${input.value}" class="${input.class}" />`;
   },
 },
 ```
